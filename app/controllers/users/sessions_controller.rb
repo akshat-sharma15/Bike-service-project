@@ -24,4 +24,16 @@ class Users::SessionsController < Devise::SessionsController
   # def configure_sign_in_params
   #   devise_parameter_sanitizer.permit(:sign_in, keys: [:attribute])
   # end
+  def after_sign_in_path_for(resource)
+    case resource.role
+    when 'user'
+      user_index_path 
+    when 'service_owner'
+      service_owner_index_path 
+    when 'admin'
+      admin_index_path
+    else
+      root_path # Default path
+    end
+  end
 end

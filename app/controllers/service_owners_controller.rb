@@ -1,0 +1,7 @@
+class ServiceOwnersController < ApplicationController
+
+  def index 
+    @user = current_user
+  end
+  
+end

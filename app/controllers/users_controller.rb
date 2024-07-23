@@ -1,7 +1,10 @@
 class UsersController < ApplicationController
+  def home
+    
+  end
 
   def index
-    render
+    @user = current_user
   end
 
   def show 
