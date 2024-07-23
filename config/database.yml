@@ -9,7 +9,7 @@ default: &default
 
 development:
   <<: *default
-  database: myapp_development
+  database: bike_service
 
 test:
   <<: *default
