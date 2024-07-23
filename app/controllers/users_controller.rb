@@ -1,6 +1,5 @@
 class UsersController < ApplicationController
   def home
-    
   end
 
   def index
@@ -8,12 +7,15 @@ class UsersController < ApplicationController
   end
 
   def show 
-    # @user = User.find(params[:id])  
     @user = current_user
   end
 
   def new 
     @user = User.new
+  end
+
+  def edit
+    @user = User.find(params[:id])
   end
 
   def create 
@@ -42,12 +44,7 @@ class UsersController < ApplicationController
     redirect_to root_path, status: :see_other
   end
 
-  def edit
-    @user = User.find(params[:id])
-  end
-
   def user_params
     params.require(:user).permit(:name, :email, :mobile, :password)
   end
-
 end
