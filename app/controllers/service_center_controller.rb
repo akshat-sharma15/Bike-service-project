@@ -1,0 +1,2 @@
+class ServiceCenterController < ApplicationController
+end

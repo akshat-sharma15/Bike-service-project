@@ -10,4 +10,6 @@ Rails.application.routes.draw do
 
   root "users#home"
   get 'users/show', to: 'users#show'
+
+  resources :service_owners, only: [:index, :add_service_center]
 end

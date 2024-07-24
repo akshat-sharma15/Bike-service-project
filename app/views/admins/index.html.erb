@@ -1,1 +1,4 @@
 your role is <%= @user.role %>
+<div class="button-container">
+  <%= button_to "Sign Out", destroy_user_session_path, method: :delete, class: 'btn' %>
+</div>

@@ -13,4 +13,7 @@ class User < ApplicationRecord
   def set_default_role
     self.role
   end
+
+  # default_scope { users }
+  # scope :users, -> { where(role: 0) }
 end
