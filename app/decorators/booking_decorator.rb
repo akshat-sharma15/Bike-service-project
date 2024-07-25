@@ -1,4 +1,4 @@
-class ServiceCenterDecorator < Draper::Decorator
+class BookingDecorator < Draper::Decorator
   delegate_all
 
   # Define presentation-specific methods here. Helpers are accessed through

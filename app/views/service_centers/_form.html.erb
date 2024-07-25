@@ -1,0 +1,20 @@
+<!-- app/views/service_centers/_form.html.erb -->
+
+<div class="Add-service-center">
+  <h2><%= @service_center.persisted? ? 'Edit Service Center' : 'Add Service Center' %></h2>
+  <%= form_with(model: [@service_owner, @service_center], local: true, id: 'service-center-form') do |form| %>
+    <div class="form-group2">
+      <%= form.label :name %>
+      <%= form.text_field :name, class: 'form-control' %>
+    </div>
+
+    <div class="form-group2">
+      <%= form.label :location %>
+      <%= form.text_field :location, class: 'form-control' %>
+    </div>
+
+    <div class="form-group2">
+      <%= form.submit @service_center.persisted? ? 'Update Service Center' : 'Create Service Center', class: 'btn btn-primary' %>
+    </div>
+  <% end %>
+</div>

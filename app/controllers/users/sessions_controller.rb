@@ -27,7 +27,7 @@ class Users::SessionsController < Devise::SessionsController
   
   def after_sign_in_path_for(resource)
     case resource.role
-    when 'user'
+    when 'user_client'
       user_index_path 
     when 'service_owner'
       service_owner_index_path 
