@@ -1,0 +1,8 @@
+hey<h1> <%= @service_owner.name%> </h1>
+  <ul>
+    <% @service_owner.service_centers.each do |s|%>
+        <li class ="index-list">
+          <%= link_to s.name, service_owner_service_center_path(@service_owner,s)%>
+        </li>
+    <% end %>
+  </ul>
