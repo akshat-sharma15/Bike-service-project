@@ -68,6 +68,8 @@ gem 'omniauth-google-oauth2'
 
 gem 'draper'
 
+gem 'state_machines-activerecord'
+
 ###################################################
 
 group :development do

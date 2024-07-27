@@ -1,4 +1,5 @@
 <!-- app/views/service_owners/index.html.erb -->
+<%     @service_owner = ServiceOwner.find_by(id: current_user.id)%>
 hey<h1> <%= @service_owner.name%> </h1>
   <ul>
     <% @service_owner.service_centers.each do |s|%>

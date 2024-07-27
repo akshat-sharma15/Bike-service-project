@@ -1,0 +1,62 @@
+<!--    -->
+      <%= form_with(model: [@service_center.service_owner, @service_center, @service_center.slots.build], local: true) do |form| %>
+      <h2>Book Slot</h2>
+        <div class="form-group2">
+          <%= form.label :status %>
+          <%= form.text_field :status, class: 'form-control', readonly: true, placeholder: 'Pending' %>
+        </div>
+
+        <div class="form-group2">
+          <%= form.label :booking_date, "Booking Date" %>
+          <%= form.date_field :booking_date, class: 'form-control' %>
+        </div>
+
+        <div class="form-group2">
+          <%= form.label :time %>
+          <%= form.text_field :time, class: 'form-control' %>
+        </div>
+
+        <div class="form-group2">
+          <%= form.label :service_type, "Service Type" %>
+          <%= form.select :service_type, ['Full Service', 'Engine Service', 'Wash Service'], {}, { id: 'service_type', class: 'form-control' } %>
+        </div>
+
+        <div class="form-group">
+          <%= form.label :cost %>
+          <%= form.number_field :cost, id: 'cost', class: 'form-control', readonly: true, placeholder: '1000.00/-' %>
+        </div>
+
+        <div class="form-group2">
+          <%= form.submit 'Create Slot', class: 'btn btn-primary' %>
+        </div>
+      <% end %>
+<hr>
+<script>
+  document.addEventListener('DOMContentLoaded', () => {
+      console.log('DOM fully loaded and parsed');
+    const serviceTypeSelect = document.getElementById('service_type');
+    const costField = document.getElementById('cost');
+
+    if (serviceTypeSelect && costField) {
+      serviceTypeSelect.addEventListener('change', () => {
+        let cost = 0;
+        switch (serviceTypeSelect.value) {
+          case 'Full Service':
+            cost = 1000;
+            break;
+          case 'Engine Service':
+            cost = 500;
+            break;
+          case 'Wash Service':
+            cost = 200;
+            break;
+          default:
+            cost = '';
+        }
+        costField.value = cost;
+      });
+    } else {
+      console.error('Required elements not found');
+    }
+  });
+</script>

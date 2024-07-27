@@ -10,16 +10,24 @@ Rails.application.routes.draw do
 
   resources :service_owners do
     resources :service_centers do
-      resources :slot, only: [:edit, :show]
+      resources :slots, only: [:index, :new, :create, :show]
     end
   end
 
-  get 'user_index_path', to: 'users#index', as: 'user_index'
+  resources :service_owners do
+    resources :service_centers do
+      resources :bikes, only: [:create, :show]
+    end
+  end
+
+  get 'client_user_index_path', to: 'client_users#index', as: 'user_index'
   get 'service_owner_index', to: 'service_owners#index', as: 'service_owner_index'
   get 'admin_index', to: 'admins#index', as: 'admin_index'
 
   root "users#home"
   get 'users/show', to: 'users#show'
+
+  resources :service_centers, only: [:index]
 
   resources :service_owners, only: [:index, :add_service_center]
 end

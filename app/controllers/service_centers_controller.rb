@@ -2,11 +2,13 @@ class ServiceCentersController < ApplicationController
   before_action :set_service_owner # , only: [:index, :create, :destroy, :show]
 
   def index
-    @service_centers = @service_owner.service_centers
+    @service_centers = ServiceCenter.all
   end
 
   def show
     @service_center = @service_owner.service_centers.find(params[:id])
+    @slots = @service_center.slots
+    # @bikes = @sevice_center.bikes
   end
 
   def new
@@ -41,7 +43,7 @@ class ServiceCentersController < ApplicationController
   def destroy
     @service_center = @service_owner.service_centers.create(service_center_params)
   end
-
+  
   private
 
   def set_service_owner

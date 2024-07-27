@@ -5,11 +5,20 @@
 <div class="container2">
   <% if user_signed_in? %>
     <div class="welcome-message">
-      Welcome, <%= current_user.email %>
+      hey, <%= current_user.name %>
     </div>
     <div class="button-container">
       <%= button_to "Sign Out", destroy_user_session_path, method: :delete, class: 'btn' %>
     </div>
+    <% case current_user.role%>
+      <% when 'client_user'%>
+              <%= render 'client_user/home' %>
+      <% when 'service_owner' %>
+                <%= render 'service_owners/home', service_owner: @service_owner %>
+      <% when 'admin'%>
+        <%= render 'admin/home' %>
+      <% else %>
+    <% end %>
   <% else %>
     <div class="button1">
       <%= button_to "Sign In", new_user_session_path, method: :get, class: 'btn' %>

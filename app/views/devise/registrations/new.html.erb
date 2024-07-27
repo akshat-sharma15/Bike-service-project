@@ -19,7 +19,7 @@
 
     <div class="form-group">
       <%= f.label :role %>
-      <%= f.select :role, options_for_select([['User', 'user'], ['Service Center Owner', 'service_owner'],['Admin', 'admin']],@user.role) %>
+      <%= f.select :role, options_for_select([['User', 'client_user'], ['Service Center Owner', 'service_owner'],['Admin', 'admin']],@user.role) %>
     </div>
 
     <div class="form-group">

@@ -1,1 +1,7 @@
-<%= current_user.service_center. %>
+<ul>
+  <% @service_centers.each do |service_center| %>
+    <li>
+      <%= link_to service_center.name,service_owner_service_center_path(service_center.service_owner, service_center) %>
+    </li>
+    <% end %>
+</ul>

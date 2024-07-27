@@ -1,2 +1,33 @@
-<h1><%= @service_center.name%></h1>
+<hr>
+<h1><%= @service_center.name%></h1> 
 <%= button_to 'update', edit_service_owner_service_center_path(@service_owner, @service_center), method: :get%>
+<hr>
+<div>
+<h2>Bikes</h2>
+  <ul>
+    <% @service_center.bikes.each do |b| %>
+      <li><%= b.info %></li>
+    <% end %>
+  </ul>
+</div>
+
+<% if @slots %>
+<ul>
+  <% @slots.each do |slot|%>
+     <li class ="index-list">
+        <%= link_to slot.client_user.name, service_owner_service_center_slot_path(@service_owner, @service_center, slot) %>
+      </li>
+  <%end%>
+  </ul>
+<%end%>
+<hr>
+
+<br>
+<% if current_user.role == 'client_user'%>
+  <%= render 'slots/form'%>
+<%end%>
+
+<% if current_user.role == 'service_owner' || 'admin'%>
+<%= render 'bikes/form'%>
+<%end%>
+<hr>
