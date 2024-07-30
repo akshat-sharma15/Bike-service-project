@@ -1,9 +1,10 @@
 class SlotsController < ApplicationController
-  before_action :set_service_owner
-  before_action :set_service_center
+  before_action :set_service_owner, except: [:index]
+  before_action :set_service_center, except: [:index]
+  before_action :set_slot, except: [:index]
 
   def index
-    @service_owner
+    @slots = Slot.all
   end
 
   def show
@@ -19,29 +20,84 @@ class SlotsController < ApplicationController
   end
 
   def create
-    @slot = @service_center.slots.build(slot_params)
-    @slot.client_user_id = current_user.id
-    @slot.status = 'pending'
-    case @slot.service_type
-    when 'Full Service'
-      @slot.cost = 1000.00
-    when 'Engine Service'
-      @slot.cost = 500.00
-    when 'Wash Service'
-      @slot.cost = 200.00
-    else
-      @slot.cost = -1.00
-    end
+    @slot = @service_center.slots.build(slot_params.merge(client_user_id: current_user.id))
 
     if @slot.save
-      redirect_to service_owner_service_center_path(@service_center.service_owner, @service_center), notice: 'Service Center was successfully created.'
+      redirect_to service_owner_service_center_path(@service_center.service_owner, @service_center), notice: 'Slot was successfully created. its under rewiew Check status after some time for wpdates '
     else
-      puts"not done", notice: 'Service Center was not created.'
+      redirect_to service_owner_service_center_path(@service_center.service_owner, @service_center), notice: 'Slot was not created.'
     end
   end
 
   def update
     @service_owner
+  end
+
+  def confirm
+    if @slot.confirm!
+      flash[:notice] = "Slot confirmed!"
+    else
+      flash[:alert] = "Slot could not be confirmed."
+    end
+    redirect_to service_owner_service_center_slot_path(@service_owner, @service_center, @slot)
+  end
+
+  def service
+    if @slot.service!
+      flash[:notice] = "Slot is now on service!"
+    else
+      flash[:alert] = "Slot could not be started."
+    end
+    redirect_to service_owner_service_center_slot_path(@service_owner, @service_center, @slot)
+  end
+
+  def complete
+    if @slot.complete!
+      flash[:notice] = "Slot completed!"
+      UserMailer.bill_mail(@slot.client_user).deliver_now
+    else
+      flash[:alert] = "Slot could not be completed."
+    end
+    redirect_to service_owner_service_center_slot_path(@service_owner, @service_center, @slot)
+  end
+
+  def reject
+    UserMailer.reject_mail(@slot.client_user).deliver_now
+    if @slot.reject!
+      flash[:notice] = "Slot rejected!"
+    else
+      flash[:alert] = "Slot could not be rejected."
+    end
+    redirect_to service_owner_service_center_slot_path(@service_owner, @service_center, @slot)
+  end
+
+  def waits
+    if @slot.waits!
+      flash[:notice] = "Slot is now waiting!"
+    else
+      flash[:alert] = "Slot could not be put on waiting."
+    end
+    redirect_to service_owner_service_center_slot_path(@service_owner, @service_center, @slot)
+  end
+
+  def reset
+    if @slot.reset!
+      flash[:notice] = "Slot reset to pending!"
+    else
+      flash[:alert] = "Slot could not be reset."
+    end
+    redirect_to service_owner_service_center_slot_path(@service_owner, @service_center, @slot)
+  end
+
+  def cancle
+    if Date.today + 2 >= Date.parse(@slot.booking_date)
+      flash[:notice] = "You can't cancle booking 2 days before the date."
+    elsif @slot.status == 'on_service'
+      flash[:notice] = "Can't cancle booking service started."
+    else
+      flash[:notice] = "Slot Cancled"
+    end
+    redirect_to service_owner_service_center_slot_path(@service_owner, @service_center, @slot)
   end
 
   private
@@ -53,6 +109,10 @@ class SlotsController < ApplicationController
   def set_service_owner
     @service_owner = ServiceOwner.find_by(id: params[:service_owner_id])
   end
+
+  def set_slot
+    @slot = @service_center.slots.find_by(id: params[:id])
+  end 
 
   def slot_params
     params.require(:slot).permit(:service_type, :booking_date, :time, :status)

@@ -1,3 +1,39 @@
-hey<h1><%= @client_user.name%></h1>
-
-<%= link_to 'Service Centers', '/service_owners/:service_owner_id/service_centers',method: :get %>
+<div class="text-center">
+  <h2 class="mb-4">Explore Our Services</h2>
+  <div class="row">
+    <div class="col-md-4">
+      <div class="card shadow">
+        <img src="<%= asset_path('slot.jpeg') %>" class="card-img-top" alt="Bikes">
+        <div class="card-body">
+          <h5 class="card-title">Bikes</h5>
+          <p class="card-text">Browse our range of bikes and find the perfect one for you.</p>
+          <a href="<%= bikes_path %>" class="btn btn-primary">View Bikes</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow">
+        <img src="<%= asset_path('service-center.jpg') %>" class="card-img-top" alt="Service Centers">
+        <div class="card-body">
+          <h5 class="card-title">Service Centers</h5>
+          <p class="card-text">Find service centers near you for reliable bike care.</p>
+          <a href="<%= service_centers_path %>" class="btn btn-primary">View Service Centers</a>
+        </div>
+      </div>
+    </div>
+    <div class="col-md-4">
+      <div class="card shadow">
+        <img src="<%= asset_path('history.webp') %>" class="card-img-top" alt="History">
+        <div class="card-body">
+          <h5 class="card-title">View History</h5>
+          <p class="card-text">Review your past bookings and activities.</p>
+          <% if user_signed_in? %>
+            <a href="<%= client_user_path(current_user) %>" class="btn btn-primary">View History</a>
+          <% else %>
+            <a href="<%= new_user_session_path %>" class="btn btn-primary">Sign In to View History</a>
+          <% end %>
+        </div>
+      </div>
+    </div>  
+  </div>
+</div>

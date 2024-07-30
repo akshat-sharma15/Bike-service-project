@@ -18,8 +18,16 @@
 
         <div class="form-group2">
           <%= form.label :service_type, "Service Type" %>
-          <%= form.select :service_type, ['Full Service', 'Engine Service', 'Wash Service'], {}, { id: 'service_type', class: 'form-control' } %>
-        </div>
+          <%= form.select :service_type, 
+                 { 
+                   'Full Service' => :full_service, 
+                   'Engine Service' => :engine_service, 
+                   'Wash Service' => :wash_service 
+                 }, 
+                 { 
+                   id: 'service_type', 
+                   class: 'form-control' 
+                 } %>
 
         <div class="form-group">
           <%= form.label :cost %>

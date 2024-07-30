@@ -1,0 +1,9 @@
+mark_bikes_available:
+  cron: "0 0 * * *" 
+  class: "MarkBikesAvailableWorker"
+  queue: default
+daily_bike_rent_email_sender_worker:
+  corn: '* * * * *'
+  class: 'DailyBikeRentEmailSenderWorker'
+  queue: default
+

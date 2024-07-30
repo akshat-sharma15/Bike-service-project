@@ -1,40 +1,85 @@
 <!-- app/views/service_owners/index.html.erb -->
-<%     @service_owner = ServiceOwner.find_by(id: current_user.id)%>
-hey<h1> <%= @service_owner.name%> </h1>
-  <ul>
-    <% @service_owner.service_centers.each do |s|%>
-        <li class ="index-list">
-          <%= link_to s.name, service_owner_service_center_path(@service_owner,s)%>    
-        </li>
-    <% end %>
-  </ul>
+<div class="container mt-5">
+  <!-- Welcome Message -->
+  <% @service_owner = ServiceOwner.find_by(id: current_user.id) %>
 
+  <!-- Service Centers List -->
+  <div class="mb-4">
+    <h2 class="text-center mb-3">Your Service Centers</h2>
+    <table class="table table-striped table-bordered">
+    <thead class="thead-dark">
+      <tr>
+        <th>Name</th>
+        <th>Revenue</th>
+        <th>Total Slots</th>
+        <th>Actions</th>
+      </tr>
+    </thead>
+    <tbody>
+      <% @service_owner.service_centers.each do |center| %>
+        <tr>
+          <td><%= center.name %></td>
+          
+          <td>₹<%= number_to_currency(center.revenues.find_by(date: Date.today), precision: 2) %></td>
+          <td><%= center.total_slots %></td>
+          <td>
+            <%= link_to 'View Details', service_owner_service_center_path(center.service_owner, center), class: 'btn btn-primary btn-sm' %>
+          </td>
+        </tr>
+      <% end %>
+    </tbody>
+  </table>
+  </div>
 
-<div class="sign-out-btn">
-  <%= button_to "Sign Out", destroy_user_session_path, method: :delete, class: 'btn' %>
-   <%= button_to "update user",user_registration_path , method: :put, class: 'btn' %>
-</div>
+  <!-- Update User Button -->
+  <div class="text-center mb-4">
+    <%= button_to "Update User", edit_user_registration_path, method: :get, class: 'btn btn-warning' %>
+  </div>
 
+  <!-- Toggle Button for Adding Service Center -->
+  <div class="text-center mb-4">
+    <button id="toggle-form-btn" class="btn btn-success">Add New Service Center</button>
+  </div>
 
+  <!-- Add Service Center Form (Initially Hidden) -->
+  <div class="card shadow mb-4" id="service-center-form" style="display: none;">
+    <div class="card-header bg-primary text-white">
+      <h3 class="mb-0">Add New Service Center</h3>
+    </div>
+    <div class="card-body">
+      <%= form_with(model: [@service_owner, @service_owner.service_centers.build], url: service_owner_service_centers_path(@service_owner), local: true) do |form| %>
+        <div class="form-group">
+          <%= form.label :name, class: 'form-label' %>
+          <%= form.text_field :name, class: 'form-control' %>
+        </div>
 
-<div class="service-center-form" id="service-center-form">
-  <div class="Add-service-center">
-    <h2>Add Service center</h2>
-    <%= form_with(model: [@service_owner, @service_owner.service_centers.build], url: service_owner_service_centers_path(@service_owner), local: true) do |form| %>
-      <div class="form-group2">
-        <%= form.label :name %>
-        <%= form.text_field :name, class: 'form-control' %>
-      </div>
+        <div class="form-group">
+          <%= form.label :location, class: 'form-label' %>
+          <%= form.text_field :location, class: 'form-control' %>
+        </div>
 
-      <div class="form-group2">
-        <%= form.label :location %>
-        <%= form.text_field :location, class: 'form-control' %>
-      </div>
-
-      <div class="form-group2">
-        <%= form.submit 'Create Service Center', class: 'btn btn-primary' %>
-      </div>
-    <% end %>
+        <div class="form-group text-center">
+          <%= form.submit 'Create Service Center', class: 'btn btn-primary' %>
+        </div>
+      <% end %>
+    </div>
   </div>
 </div>
 
+<!-- JavaScript for Toggling Form Visibility -->
+<script>
+  document.addEventListener('DOMContentLoaded', function() {
+    var toggleBtn = document.getElementById('toggle-form-btn');
+    var formContainer = document.getElementById('service-center-form');
+
+    toggleBtn.addEventListener('click', function() {
+      if (formContainer.style.display === 'none') {
+        formContainer.style.display = 'block';
+        toggleBtn.textContent = 'Cancel';
+      } else {
+        formContainer.style.display = 'none';
+        toggleBtn.textContent = 'Add New Service Center';
+      }
+    });
+  });
+</script>

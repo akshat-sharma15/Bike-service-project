@@ -28,7 +28,7 @@ gem "stimulus-rails"
 gem "jbuilder"
 
 # Use Redis adapter to run Action Cable in production
-gem "redis", "~> 4.0"
+gem "redis-rails", '~> 5.0.2'
 
 # Use Kredis to get higher-level data types in Redis [https://github.com/rails/kredis]
 # gem "kredis"
@@ -70,6 +70,21 @@ gem 'draper'
 
 gem 'state_machines-activerecord'
 
+gem 'pundit'
+
+gem 'sidekiq', '6.1.2'
+gem 'sidekiq-scheduler'
+gem 'sidekiq-status', '~> 1.1', '>= 1.1.2'
+gem 'sidekiq-worker-killer'
+gem 'sidekiq-unique-jobs'
+
+gem 'bootstrap', '~> 5.1.3'
+gem 'jquery-rails'
+
+gem "sassc-rails"
+
+gem 'stripe'
+
 ###################################################
 
 group :development do
@@ -77,6 +92,7 @@ group :development do
   gem "web-console"
 
   gem 'rspec-rails'
+  gem 'pry'
 
   gem 'rubocop', require: false
   gem 'rubocop-rails', require: false

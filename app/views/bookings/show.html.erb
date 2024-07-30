@@ -1,0 +1,28 @@
+<h1>Booking</h1>
+
+<p>
+  <strong>Booking Date:</strong>
+  <%= @booking.booking_date %>
+</p>
+
+<p>
+  <strong>Return Date:</strong>
+  <%= @booking.return_date %>
+</p>
+
+<p>
+  <strong>Status:</strong>
+  <%= @booking.status %>
+</p>
+      <% if @booking.status == 'pending'%>
+        <%= button_to 'Confirm', confirm_service_owner_service_center_bike_booking_path(@service_owner, @service_center, @bike, @booking), method: :post %>
+      <% elsif @booking.status == 'confirmed'%>
+        <%= button_to 'Activate', activate_service_owner_service_center_bike_booking_path(@service_owner, @service_center, @bike, @booking), method: :post %>
+      <% elsif @booking.status == 'active'%>
+          <%= button_to 'Complete', complete_service_owner_service_center_bike_booking_path(@service_owner, @service_center, @bike, @booking), method: :post %>
+      <%end%>
+      <% if @booking.status == 'pending' || 'confirm'%>
+          <%= button_to 'Reject', reject_service_owner_service_center_bike_booking_path(@service_owner, @service_center, @bike, @booking), method: :post %>
+      <%end%>
+<%# <%= link_to 'Edit', edit_service_owner_service_center_bike_booking_path(@service_owner, @service_center, @bike, @booking) %> | %>
+<%# <%= link_to 'Back', service_owner_service_center_bike_bookings_path(@service_owner, @service_center, @bike) %> %>

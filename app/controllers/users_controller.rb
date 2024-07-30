@@ -1,5 +1,10 @@
 class UsersController < ApplicationController
+  before_action :set_service_owner 
+  before_action :set_client_user
+  before_action :set_admin
+
   def home
+    @client_user
   end
 
   def index
@@ -42,6 +47,20 @@ class UsersController < ApplicationController
     @user.destroy
 
     redirect_to root_path, status: :see_other
+  end
+
+  private
+
+  def set_service_owner
+    @service_owner ||= ServiceOwner.find_by(id: current_user.id) if user_signed_in?
+  end
+
+  def set_client_user
+    @client_user ||= ClientUser.find_by(id: current_user.id) if user_signed_in?
+  end
+
+  def set_admin
+    @admin ||= Admin.find_by(id: current_user) if user_signed_in?
   end
 
   def user_params

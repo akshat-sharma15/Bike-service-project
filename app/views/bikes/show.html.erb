@@ -1,0 +1,64 @@
+<!-- app/views/bikes/show.html.erb -->
+<hr>
+<div class="container">
+  <h2><%= @bike.info %></h2>
+  <% if @bike.avatar.attached? %>
+    <div class="text-center">
+      <%= image_tag @bike.avatar, class: 'img-fluid rounded' %>
+    </div>
+  <% end %>
+  <hr>
+
+  <% if current_user.role == 'client_user' %>
+    <%= render 'bookings/form' %>
+  <% end %>
+
+  <% if ['service_owner', 'admin'].include?(current_user.role) %>
+    <div>
+      <h2>Bookings</h2>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Booking Date</th>
+            <th>Client Name</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @bike.bookings.each do |booking| %>
+            <tr>
+              <td><%= link_to booking.booking_date, service_owner_service_center_bike_booking_path(@service_owner, @service_center, @bike, booking), method: :get %></td>
+              <td><%= booking.client_user.name %></td>
+              <td><%= link_to 'View', service_owner_service_center_bike_booking_path(@service_owner, @service_center, @bike, booking), method: :get, class: 'btn btn-primary btn-sm' %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <hr>
+
+      <p><strong>Status:</strong> <%= @bike.status %></p>
+
+      <div class="d-flex justify-content-between">
+        <%= form_with url: need_full_service_service_owner_service_center_bike_path(@service_owner, @service_center, @bike), method: :post, class: 'mr-2' do %>
+          <%= submit_tag 'Set to Full Service', class: 'btn btn-secondary' %>
+        <% end %>
+
+        <%= form_with url: need_engine_service_service_owner_service_center_bike_path(@service_owner, @service_center, @bike), method: :post, class: 'mr-2' do %>
+          <%= submit_tag 'Set to Engine Service', class: 'btn btn-secondary' %>
+        <% end %>
+
+        <%= form_with url: need_wash_service_service_owner_service_center_bike_path(@service_owner, @service_center, @bike), method: :post, class: 'mr-2' do %>
+          <%= submit_tag 'Set to Wash Service', class: 'btn btn-secondary' %>
+        <% end %>
+
+        <%= form_with url: avail_service_owner_service_center_bike_path(@service_owner, @service_center, @bike), method: :post, class: 'mr-2' do %>
+          <%= submit_tag 'Set to Available', class: 'btn btn-success' %>
+        <% end %>
+
+        <%= form_with url: not_available_service_owner_service_center_bike_path(@service_owner, @service_center, @bike), method: :post, class: 'mr-2' do %>
+          <%= submit_tag 'Set to Not Available', class: 'btn btn-danger' %>
+        <% end %>
+      </div>
+    </div>
+  <% end %>
+</div>

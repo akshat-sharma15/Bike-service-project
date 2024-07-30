@@ -1,0 +1,28 @@
+<div class="container">
+
+  <h2>All Slots Bookings</h2>
+    
+    <!-- Table for Slots -->
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Service Type</th>
+          <th>Booking Date</th>
+          <th>Status</th>
+          <th>Cost</th>
+          <th>Service Center</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @slots.each do |slot| %>
+          <tr>
+            <td><%= link_to slot.service_type, service_owner_service_center_slot_path(slot.service_center.service_owner, slot.service_center, slot), method: :get %></td>
+            <td><%= Date.parse(slot.booking_date).strftime('%d-%m-%y') %></td>
+            <td><%= slot.status %></td>
+            <td>$<%= slot.cost %></td>
+            <td><%= slot.service_center.name %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+</div>
