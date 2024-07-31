@@ -45,8 +45,12 @@ class BookingsController < ApplicationController
   end
 
   def confirm
-    @booking.confirm!
+    if @booking.confirm!
     redirect_to service_owner_service_center_bike_path(@service_owner, @service_center, @bike)
+    else
+    flash.now[:alert] = @booking.errors.full_messages
+    render :show
+    end
   end
 
   def activate

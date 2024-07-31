@@ -14,4 +14,8 @@ class UserMailer < ApplicationMailer
   def reject_mail(user)
     mail(to: user.email, subject: 'Rejection Mail')
   end
+
+  def daily_revenue_report(service_center)
+    mail(to: service_center.service_owner.email, subject: 'DAily report Mail')
+  end
 end

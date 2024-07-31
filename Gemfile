@@ -85,6 +85,8 @@ gem "sassc-rails"
 
 gem 'stripe'
 
+gem 'whenever', require: false
+
 ###################################################
 
 group :development do

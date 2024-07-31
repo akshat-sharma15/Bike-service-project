@@ -27,6 +27,7 @@ class Bike < ApplicationRecord
       transition returned: :engine_service
       transition wash_service: :engine_service
       transition not_avilable: :engine_service
+      transition avilable: :engine_service
     end
 
     event :need_wash_service do

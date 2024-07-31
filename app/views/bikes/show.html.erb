@@ -39,21 +39,27 @@
       <p><strong>Status:</strong> <%= @bike.status %></p>
 
       <div class="d-flex justify-content-between">
-        <%= form_with url: need_full_service_service_owner_service_center_bike_path(@service_owner, @service_center, @bike), method: :post, class: 'mr-2' do %>
-          <%= submit_tag 'Set to Full Service', class: 'btn btn-secondary' %>
-        <% end %>
-
-        <%= form_with url: need_engine_service_service_owner_service_center_bike_path(@service_owner, @service_center, @bike), method: :post, class: 'mr-2' do %>
-          <%= submit_tag 'Set to Engine Service', class: 'btn btn-secondary' %>
-        <% end %>
-
         <%= form_with url: need_wash_service_service_owner_service_center_bike_path(@service_owner, @service_center, @bike), method: :post, class: 'mr-2' do %>
           <%= submit_tag 'Set to Wash Service', class: 'btn btn-secondary' %>
         <% end %>
 
-        <%= form_with url: avail_service_owner_service_center_bike_path(@service_owner, @service_center, @bike), method: :post, class: 'mr-2' do %>
-          <%= submit_tag 'Set to Available', class: 'btn btn-success' %>
+      <%if @bike.status == 'wash_service' || @bike.status == 'engine_service'%>
+        <%= form_with url: need_full_service_service_owner_service_center_bike_path(@service_owner, @service_center, @bike), method: :post, class: 'mr-2' do %>
+          <%= submit_tag 'Set to Full Service', class: 'btn btn-secondary' %>
         <% end %>
+      <%end%>
+
+      <%if @bike.status == 'wash_service'%>
+        <%= form_with url: need_engine_service_service_owner_service_center_bike_path(@service_owner, @service_center, @bike), method: :post, class: 'mr-2' do %>
+          <%= submit_tag 'Set to Engine Service', class: 'btn btn-secondary' %>
+        <% end %>
+      <%end%>
+
+        <%unless @bike.status == 'avilable'%>
+          <%= form_with url: avail_service_owner_service_center_bike_path(@service_owner, @service_center, @bike), method: :post, class: 'mr-2' do %>
+            <%= submit_tag 'Set to Available', class: 'btn btn-success' %>
+          <% end %>
+        <%end%>
 
         <%= form_with url: not_available_service_owner_service_center_bike_path(@service_owner, @service_center, @bike), method: :post, class: 'mr-2' do %>
           <%= submit_tag 'Set to Not Available', class: 'btn btn-danger' %>

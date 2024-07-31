@@ -51,8 +51,8 @@ class Slot < ApplicationRecord
   end
   before_save :set_cost
   before_save :initial_state
-  scope :with_booking_date, ->(date) { where(booking_date: date, status: 'confirmed') }
-  scope :working, ->(date) { where(booking_date: date, status: 'on_service') }
+  scope :with_booking_date, ->(date) { where(booking_date: date, status: :confirmed) }
+  scope :working, ->(date) { where(booking_date: date, status: :on_service) }
 
   private
 
@@ -84,13 +84,13 @@ class Slot < ApplicationRecord
 
   def initial_state
     total = self.service_center.total_slots
-    if status == 'pending' && recent_booking?.present?
+    if status == :pending && recent_booking?.present?
       reject!
-    elsif status == 'pending' && Slot.with_booking_date(Date.parse(self.booking_date)).count >= total
+    elsif status == :pending && Slot.with_booking_date(Date.parse(self.booking_date)).count >= total
       waits!
-    elsif status == 'pending' && Slot.with_booking_date(Date.parse(self.booking_date)).count < total
+    elsif status == :pending && Slot.with_booking_date(Date.parse(self.booking_date)).count < total
       confirm!
-    elsif status == 'confirmed' && (Slot.working(Date.parse(self.booking_date)).count < (total/2))
+    elsif status == :confirmed && (Slot.working(Date.parse(self.booking_date)).count < (total/2))
       service!
     end
   end

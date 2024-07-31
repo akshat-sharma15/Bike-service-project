@@ -4,9 +4,9 @@ class Booking < ApplicationRecord
   belongs_to :bike
   belongs_to :service_center
   has_one_attached :document
-  validate :valid_date
-  validates :booking_date, presence: true
-  validates :return_date, presence: true
+  validate :valid_date,on: :create
+  validates :booking_date, presence: true,on: :create
+  validates :return_date, presence: true,on: :create
 
   scope :with_booking_date, ->(id) { where(booking_date: Date.today, status: :confirmed, bike_id: id) }
 
