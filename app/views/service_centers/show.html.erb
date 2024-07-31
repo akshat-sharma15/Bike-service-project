@@ -1,2 +1,179 @@
-<h1><%= @service_center.name%></h1>
-<%= button_to 'update', edit_service_owner_service_center_path(@service_owner, @service_center), method: :get%>
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Service Center Details</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  
+  <!-- Bootstrap CSS from CDN -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/css/bootstrap.min.css">
+  
+  <!-- Other stylesheets -->
+  <%= stylesheet_link_tag 'application', media: 'all' %>
+  
+  <!-- Chart.js Library -->
+  <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+  
+  <style>
+    .chart-container {
+      position: fixed; /* Fixed position to stay in view */
+      top: 90px; /* Adjust the top distance as needed */
+      right: 20px; /* Adjust the right distance as needed */
+      width: 300px; /* Width of the chart container */
+      height: 300px; /* Height of the chart container */
+      z-index: 1000; /* Ensure it's above other content */
+    }
+    .chart-container canvas {
+      width: 100% !important; /* Make the chart fill the container */
+      height: 100% !important; /* Make the chart fill the container */
+    }
+    .content-container {
+      margin-right: 340px; /* Add margin to the right to avoid overlap with chart */
+    }
+  </style>
+</head>
+<body>
+  <div class="container mt-5 content-container">
+    <!-- Header with Service Center Name -->
+    <div class="row">
+      <div class="col-md-12">
+        <h1><%= @service_center.name %></h1>
+      </div>
+    </div>
+    <hr>
+
+    <!-- Slots Section -->
+  <%if @client_user%>
+    <ul class="list-group">
+        <% @client_user.slots.each do |slot| %>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span>
+              <% if slot.service_center.id == params[:id]%>
+                <%= link_to slot.client_user.name, service_owner_service_center_slot_path(@service_owner, @service_center, slot) %>
+              <%end%>
+            </span>
+          </li>
+        <% end %>
+      </ul>
+  <%else%>
+      <% if @slots %>
+      <h2>Slots</h2>
+      <ul class="list-group">
+        <% @slots.each do |slot| %>
+          <li class="list-group-item d-flex justify-content-between align-items-center">
+            <span>
+              <%= link_to slot.client_user.name, service_owner_service_center_slot_path(@service_owner, @service_center, slot) %>
+              <span class="badge badge-secondary"><%= slot.service_type %></span>
+            </span>
+          </li>
+        <% end %>
+      </ul>
+    <% end %>
+  <%end%>
+    <hr>
+
+    <!-- Client User Specific Sections -->
+    <% if current_user.role == 'client_user' %>
+      <h2>Bikes</h2>
+      <ul class="list-group">
+        <% @service_center.bikes.each do |bike| %>
+          <% if bike.status == 'avilable' %>
+            <li class="list-group-item">
+              <%= link_to bike.info, service_owner_service_center_bike_path(@service_owner, @service_center, bike) %>
+            </li>
+          <% end %>
+        <% end %>
+      </ul>
+      <button class="btn btn-primary mt-3" type="button" data-toggle="collapse" data-target="#slotForm" aria-expanded="false" aria-controls="slotForm">
+        Add Slot
+      </button>
+      <div class="collapse mt-3" id="slotForm">
+        <%= render 'slots/form' %>
+      </div>
+      
+      <button class="btn btn-primary mt-3" type="button" data-toggle="collapse" data-target="#ratingForm" aria-expanded="false" aria-controls="ratingForm">
+        Add Rating
+      </button>
+      <div class="collapse mt-3" id="ratingForm">
+        <%= render 'ratings/form' %>
+      </div>
+    <% end %>
+
+    <!-- Service Owner Specific Sections -->
+    <% if current_user.role == 'service_owner' || current_user.role == 'admin' %>
+      <h2>Bikes</h2>
+      <ul class="list-group">
+        <% @service_center.bikes.each do |b| %>
+          <li class="list-group-item">
+            <%= link_to b.info, service_owner_service_center_bike_path(@service_owner, @service_center, b) %>
+          </li>
+        <% end %>
+      </ul>
+      
+      <button class="btn btn-primary mt-3" type="button" data-toggle="collapse" data-target="#updateServiceCenterForm" aria-expanded="false" aria-controls="updateServiceCenterForm">
+        Update Service Center
+      </button>
+      <div class="collapse mt-3" id="updateServiceCenterForm">
+        <%= form_with model: [@service_owner, @service_center], local: true do |form| %>
+          <div class="form-group">
+            <%= form.label :total_slots, "Total Slots" %>
+            <%= form.number_field :total_slots, class: "form-control" %>
+          </div>
+
+          <div class="form-group">
+            <%= form.submit "Update Service Center", class: "btn btn-primary" %>
+          </div>
+        <% end %>
+      </div>
+
+      <button class="btn btn-primary mt-3" type="button" data-toggle="collapse" data-target="#addBikeForm" aria-expanded="false" aria-controls="addBikeForm">
+        Add Bike
+      </button>
+      <div class="collapse mt-3" id="addBikeForm">
+        <%= render 'bikes/form' %>
+      </div>
+    <% end %>
+    <hr>
+  </div>
+
+ 
+
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+  
+  <!-- Chart.js Script -->
+  <script>
+    document.addEventListener("DOMContentLoaded", function() {
+      var ctx = document.getElementById('revenueChart').getContext('2d');
+      var revenueChart = new Chart(ctx, {
+        type: 'doughnut',
+        data: {
+          labels: ['Today', 'This Month'],
+          datasets: [{
+            label: 'Revenue',
+            data: [<%= @todays_revenue %>, <%= @this_months_revenue %>],
+            backgroundColor: ['rgba(75, 192, 192, 0.2)', 'rgba(153, 102, 255, 0.2)'],
+            borderColor: ['rgba(75, 192, 192, 1)', 'rgba(153, 102, 255, 1)'],
+            borderWidth: 1
+          }]
+        },
+        options: {
+          responsive: true,
+          plugins: {
+            legend: {
+              position: 'top',
+            },
+            tooltip: {
+              callbacks: {
+                label: function(tooltipItem) {
+                  return tooltipItem.label + ': $' + tooltipItem.raw.toFixed(2);
+                }
+              }
+            }
+          }
+        }
+      });
+    });
+  </script>
+</body>
+</html>

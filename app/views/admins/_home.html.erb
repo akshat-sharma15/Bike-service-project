@@ -1,0 +1,70 @@
+<div class="container mt-5">
+  <div class="row text-center">
+    <div class="col-md-3">
+      <div class="card text-white bg-primary mb-3">
+        <div class="card-body">
+          <div class="card-title">
+            <h5>Total Users</h5>
+          </div>
+          <div class="card-text">
+            <h3><%= User.count %></h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card text-white bg-success mb-3">
+        <div class="card-body">
+          <div class="card-title">
+            <h5>Total Registered Service Centers</h5>
+          </div>
+          <div class="card-text">
+            <h3><%= ServiceCenter.count %></h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card text-white bg-warning mb-3">
+        <div class="card-body">
+          <div class="card-title">
+            <h5>Total Bikes on System</h5>
+          </div>
+          <div class="card-text">
+            <h3><%= Bike.count %></h3>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-md-3">
+      <div class="card text-white bg-danger mb-3">
+        <div class="card-body">
+          <div class="card-title">
+            <h5>Served Orders</h5>
+          </div>
+          <div class="card-text">
+            <h3><%= Slot.count + Booking.count %></h3>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="row text-center mt-3">
+    <div class="col-md-3">
+      <%= link_to 'All Service Centers', service_centers_path, class: 'btn btn-light' %>
+    </div>
+    <div class="col-md-3">
+      <%= link_to 'View All Bikes', bikes_path, class: 'btn btn-light' %>
+    </div>
+    <div class="col-md-3">
+      <%= link_to 'View All Slots', slots_path, class: 'btn btn-light' %>
+    </div>
+    <div class="col-md-3">
+      <%= link_to 'View All Bookings', bookings_path, class: 'btn btn-light' %>
+    </div>
+  </div>
+</div>

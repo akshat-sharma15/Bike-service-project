@@ -1,12 +1,26 @@
 class ServiceCentersController < ApplicationController
-  before_action :set_service_owner # , only: [:index, :create, :destroy, :show]
-
+   before_action :set_service_owner, except: [:index]
   def index
-    @service_centers = @service_owner.service_centers
+    if params[:location].present?
+      @service_centers = ServiceCenter.where('location ILIKE ?', "%#{params[:location]}%")
+    else
+      @service_centers = ServiceCenter.all
+    end
   end
 
   def show
-    @service_center = @service_owner.service_centers.find(params[:id])
+    @service_owner = ServiceOwner.find_by(id:params[:service_owner_id])
+    @client_user = ClientUser.find_by(id: current_user.id) 
+    @service_center = ServiceCenter.find_by(id:params[:id])
+    @slots = @service_center.slots
+    @user_slots = @service_center.slots.where(client_user_id: current_user.id) if current_user.role == 'client_user'
+    @todays_revenue = Revenue.total_revenue_for_date(Date.today,@service_center.id)
+    @this_months_revenue = Revenue.total_revenue_for_month(Date.today.year, Date.today.month, @service_center.id)
+    # @bikes = @sevice_center.bikes
+  end
+
+  def search
+    redirect_to service_centers_path(location: params[:location])
   end
 
   def new
@@ -49,6 +63,6 @@ class ServiceCentersController < ApplicationController
   end
 
   def service_center_params
-    params.require(:service_center).permit(:name, :location)
+    params.require(:service_center).permit(:name, :location, :total_slots)
   end
 end

@@ -1,0 +1,38 @@
+<!-- app/views/bikes/index.html.erb -->
+<h1 class="my-4 text-center">All Bikes</h1>
+
+<div class="container">
+  <div class="row">
+    <div class="col-md-12">
+      <div class="card">
+        <div class="card-header bg-primary text-white">
+          <h4 class="mb-0">Bikes List</h4>
+        </div>
+        <div class="card-body">
+          <table class="table table-striped table-bordered">
+            <thead class="thead-dark">
+              <tr>
+                <th>Bike Info</th>
+                <th>Service Center</th>
+                <th>Status</th>
+                <th>Actions</th>
+              </tr>
+            </thead>
+            <tbody>
+              <% @bikes.each do |bike| %>
+                <tr>
+                  <td><%= bike.info %></td>
+                  <td><%= bike.service_center.name if bike.service_center %></td>
+                  <td><%= bike.status %></td>
+                  <td>
+                    <%= link_to 'View', service_owner_service_center_bike_path(bike.service_center.service_owner, bike.service_center, bike), class: 'btn btn-info btn-sm' %>
+                  </td>
+                </tr>
+              <% end %>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    </div>
+  </div>
+</div>

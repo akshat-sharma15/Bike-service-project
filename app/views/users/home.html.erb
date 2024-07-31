@@ -1,22 +1,101 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ServiceZone</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  
+  <!-- Bootstrap CSS from CDN -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/css/bootstrap.min.css">
+  
+  <!-- Other stylesheets -->
+  <%= stylesheet_link_tag 'application', media: 'all' %>
+  
+  <!-- Custom Styles -->
+  <style>
+    .hero {
+      background: url('<%= asset_path('header-bg.jpg') %>') no-repeat center center;
+      background-size: cover;
+      color: white;
+      text-align: center;
+      padding: 120px 0;
+      position: relative;
+    }
+    .hero-overlay {
+      position: absolute;
+      top: 0;
+      left: 0;
+      width: 100%;
+      height: 100%;
+      background: rgba(0, 0, 0, 0.5);
+      z-index: 1;
+    }
+    .hero-content {
+      position: relative;
+      z-index: 2;
+    }
+    .btn-custom {
+      border-radius: 20px;
+      padding: 10px 20px;
+      font-size: 16px;
+    }
+    .main-content {
+      padding: 40px 0;
+      background-color: #f8f9fa;
+    }
+    .card {
+      border: none;
+      border-radius: 10px;
+      overflow: hidden;
+    }
+    .card img {
+      height: 150px;
+      object-fit: cover;
+    }
+    .card-body {
+      padding: 1.5rem;
+    }
+  </style>
+</head>
 
-<img src="<%= asset_path('bike_logo.png') %>" alt="Company Logo" />
-<h1 class="headinh">Welcome To Vaahan !</h1>
+<body>
+  <!-- Hero Section -->
+  <header class="hero">
+    <div class="hero-overlay"></div>
+    <div class="container hero-content">
+      <h1 class="display-3 font-weight-bold mb-4">Discover the Best Bike Services</h1>
+      <p class="lead mb-4">Join us for exceptional service and top-notch bike care.</p>
+      <% if user_signed_in? %>
+        <p class="font-weight-light">Welcome back, <%= current_user.name %>!</p>
+      <% else %>
+        <a href="<%= new_user_session_path %>" class="btn btn-light btn-custom">Sign In</a>
+        <a href="<%= new_registration_path(:user) %>" class="btn btn-outline-light btn-custom ml-2">Sign Up</a>
+      <% end %>
+    </div>
+  </header> 
+  
+  <!-- Main Content -->
+  <div class="main-content">
+    <div class="container">
+      <% if user_signed_in? %>
+        <% case current_user.role %>
+          <% when 'client_user' %>
+            <%= render 'client_users/home' %>
+          <% when 'service_owner' %>
+            <%= render 'service_owners/home', service_owner: @service_owner %>
+          <% when 'admin' %>
+            <%= render 'admins/home' %>
+          <% else %>
+        <% end %>
+      <% else %>
+        
+      <% end %>
+    </div>
+  </div>
 
-<div class="container2">
-  <% if user_signed_in? %>
-    <div class="welcome-message">
-      Welcome, <%= current_user.email %>
-    </div>
-    <div class="button-container">
-      <%= button_to "Sign Out", destroy_user_session_path, method: :delete, class: 'btn' %>
-    </div>
-  <% else %>
-    <div class="button1">
-      <%= button_to "Sign In", new_user_session_path, method: :get, class: 'btn' %>
-    </div>
-
-    <div class="button2">
-      <%= button_to "Sign up", new_registration_path(:user), method: :get %><br />
-    </div>
-  <% end %>
-</div>
+  <!-- Bootstrap and jQuery Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

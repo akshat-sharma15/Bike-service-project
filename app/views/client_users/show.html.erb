@@ -1,0 +1,79 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Client User Bookings</title>
+  <%= csrf_meta_tags %>
+  <%= csp_meta_tag %>
+  
+  <!-- Bootstrap CSS from CDN -->
+  <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/css/bootstrap.min.css">
+  
+  <!-- Other stylesheets -->
+  <%= stylesheet_link_tag 'application', media: 'all' %>
+  
+  <style>
+    .container {
+      margin-top: 20px;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h2>Service Bookings</h2>
+    
+    <!-- Table for Slots -->
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Service Type</th>
+          <th>Booking Date</th>
+          <th>Status</th>
+          <th>Cost</th>
+          <th>Service Center</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @client_user.slots.each do |slot| %>
+          <tr>
+            <td><%= link_to slot.service_type, service_owner_service_center_slot_path(slot.service_center.service_owner, slot.service_center, slot), method: :get %></td>
+            <td><%= Date.parse(slot.booking_date).strftime('%d-%m-%y') %></td>
+            <td><%= slot.status %></td>
+            <td>$<%= slot.cost %></td>
+            <td><%= slot.service_center.name %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+    
+    <hr>
+    
+    <h2>Bikes</h2>
+    
+    <!-- Table for Bookings -->
+    <table class="table table-bordered table-striped">
+      <thead>
+        <tr>
+          <th>Bike Info</th>
+          <th>Service Center</th>
+          <th>Status</th>
+          <th>Booking Date</th>
+        </tr>
+      </thead>
+      <tbody>
+        <% @client_user.bookings.each do |book| %>
+          <tr>
+            <td><%= link_to book.bike.info, service_owner_service_center_bike_booking_path(book.bike.service_center.service_owner, book.bike.service_center, book.bike, book), method: :get %></td>
+            <td><%= book.bike.service_center.name %></td>
+            <td><%= book.status%></td>
+            <td><%= book.booking_date.strftime('%Y-%m-%d') %></td>
+          </tr>
+        <% end %>
+      </tbody>
+    </table>
+  </div>
+
+  <!-- Bootstrap and jQuery Scripts -->
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@4.6.0/dist/js/bootstrap.bundle.min.js"></script>
+</body>
+</html>

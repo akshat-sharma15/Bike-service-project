@@ -1,0 +1,45 @@
+<!-- app/views/bookings/show.html.erb -->
+
+<h1 class="mb-4">Booking Details</h1>
+
+<div class="card mb-3">
+  <div class="card-body">
+    <p>
+      <strong>Custmer Name:</strong>
+      <%= @booking.client_user.name %>
+    </p>
+
+    <p>
+      <strong>Booking Date:</strong>
+      <%= @booking.booking_date %>
+    </p>
+
+    <p>
+      <strong>Return Date:</strong>
+      <%= @booking.return_date %>
+    </p>
+
+    <p>
+      <strong>Status:</strong>
+        <%= @booking.status %>
+    </p>
+
+    <div class="btn-group mt-3" role="group">
+      <% if @booking.status == 'pending' %>
+        <%= button_to 'Confirm', confirm_service_owner_service_center_bike_booking_path(@service_owner, @service_center, @bike, @booking), method: :post, class: 'btn btn-success' %>
+      <% elsif @booking.status == 'confirmed' %>
+        <%= button_to 'Activate', activate_service_owner_service_center_bike_booking_path(@service_owner, @service_center, @bike, @booking), method: :post, class: 'btn btn-primary' %>
+      <% elsif @booking.status == 'active' %>
+        <%= button_to 'Complete', complete_service_owner_service_center_bike_booking_path(@service_owner, @service_center, @bike, @booking), method: :post, class: 'btn btn-warning' %>
+      <% end %>
+
+      <% if @booking.status == 'pending' || @booking.status == 'confirmed' %>
+        <%= button_to 'Reject', reject_service_owner_service_center_bike_booking_path(@service_owner, @service_center, @bike, @booking), method: :post, class: 'btn btn-danger' %>
+      <% end %>
+    </div>
+  </div>
+</div>
+
+<div class="mt-4">
+  <%= link_to 'Back to Bookings', service_owner_service_center_bike_bookings_path(@service_owner, @service_center, @bike), class: 'btn btn-secondary' %>
+</div>
