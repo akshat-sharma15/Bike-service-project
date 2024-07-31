@@ -8,13 +8,6 @@ class ApplicationController < ActionController::Base
     Rails.logger.info "FLASH: #{flash.to_hash.inspect}"
   end
 
-  def set_current_user
-    case resource.role
-    when 'service_owner'
-      ServiceOwner.find_by(email: resource.email)
-    end
-  end
-
   def configure_permitted_parameters
     devise_parameter_sanitizer.permit(:sign_up, keys: [:name, :role])
     # devise_parameter_sanitizer.permit(:account_update, keys: [:name, role])

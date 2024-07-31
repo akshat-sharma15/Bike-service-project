@@ -9,14 +9,12 @@ class ServiceCentersController < ApplicationController
   end
 
   def show
-    @service_owner = ServiceOwner.find_by(id:params[:service_owner_id])
     @client_user = ClientUser.find_by(id: current_user.id) 
     @service_center = ServiceCenter.find_by(id:params[:id])
     @slots = @service_center.slots
     @user_slots = @service_center.slots.where(client_user_id: current_user.id) if current_user.role == 'client_user'
     @todays_revenue = Revenue.total_revenue_for_date(Date.today,@service_center.id)
     @this_months_revenue = Revenue.total_revenue_for_month(Date.today.year, Date.today.month, @service_center.id)
-    # @bikes = @sevice_center.bikes
   end
 
   def search

@@ -33,6 +33,7 @@ class Booking < ApplicationRecord
       transition confirmed: :rejected
     end
   end
+
   def valid_date
     if booking_date.present? && return_date.present?
       if booking_date < Date.today

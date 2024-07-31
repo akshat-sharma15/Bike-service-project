@@ -22,15 +22,9 @@ class BookingsController < ApplicationController
   end
 
   def create
-    @service_owner = ServiceOwner.find_by(id: params[:service_owner_id])
-    @service_center = ServiceCenter.find_by(id: params[:service_center_id])
-    @bike = Bike.find_by(id: params[:bike_id])
     @client_user = ClientUser.find_by(id: current_user.id)
 
-    @booking = @bike.bookings.build(booking_params)
-    @booking.service_center = @service_center
-    @booking.client_user = @client_user
-    @booking.status = 'pending'
+    @booking = @bike.bookings.build(booking_params.merge(params[:service_center_id], @client_user.id))
     if @booking.save
       flash[:notice] = 'Booking was successfully added.'
       redirect_to service_owner_service_center_bike_path(@service_owner, @service_center, @bike)
@@ -46,10 +40,10 @@ class BookingsController < ApplicationController
 
   def confirm
     if @booking.confirm!
-    redirect_to service_owner_service_center_bike_path(@service_owner, @service_center, @bike)
+      redirect_to service_owner_service_center_bike_path(@service_owner, @service_center, @bike)
     else
-    flash.now[:alert] = @booking.errors.full_messages
-    render :show
+      flash.now[:alert] = @booking.errors.full_messages
+      render :show
     end
   end
 
@@ -88,7 +82,7 @@ class BookingsController < ApplicationController
 
   def set_booking
     @booking = @bike.bookings.find(params[:id])
-  end 
+  end
 
   def booking_params
     params.require(:booking).permit(:booking_date, :return_date, :document, :service_center_id, :bike_id)

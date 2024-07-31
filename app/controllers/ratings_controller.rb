@@ -1,10 +1,11 @@
 class RatingsController < ApplicationController
   def index
-    @service_center = ServiceCenter.find_by(id: params[:service_center_id ])
+    @service_center = ServiceCenter.find_by(id: params[:service_center_id])
     @ratings = @service_center.ratings
   end
+
   def new
-    @service_center = ServiceCenter.find_by(id: params[:service_center_id ])
+    @service_center = ServiceCenter.find_by(id: params[:service_center_id])
     @rate = @service_center.ratings.new
   end
 
@@ -13,7 +14,6 @@ class RatingsController < ApplicationController
   end
 
   def create
-    debugger
     @service_owner = ServiceOwner.find_by(id: params[:service_owner_id])
     @service_center = ServiceCenter.find_by(id: params[:service_center_id])
     @rate = @service_center.ratings.new(rating_params)

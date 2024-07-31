@@ -8,7 +8,7 @@ class UserMailer < ApplicationMailer
   end
 
   def bill_mail(user)
-    mail(to: user.email, subject: 'Congrats your service done')
+    mail(to: user, subject: 'Congrats your service done')
   end
 
   def reject_mail(user)
@@ -16,6 +16,7 @@ class UserMailer < ApplicationMailer
   end
 
   def daily_revenue_report(service_center)
-    mail(to: service_center.service_owner.email, subject: 'DAily report Mail')
+    @service_center = service_center
+    mail(to: @service_center.service_owner, subject: 'Daily report Mail')
   end
 end

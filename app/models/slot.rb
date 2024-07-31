@@ -73,9 +73,6 @@ class Slot < ApplicationRecord
     else
       self.cost = -1.00
     end
-    self.assign_attributes(
-      cost: 
-    )
   end
 
   def update_revenue
