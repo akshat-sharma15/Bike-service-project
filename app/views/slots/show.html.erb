@@ -44,9 +44,9 @@
     
     <!-- Action Buttons -->
     <div>
-      <% if @slot.status == 'rejected' %>
+      <% if @slot.status.to_sym == :rejected %>
         
-      <% elsif @slot.status == 'complete' %>
+      <% elsif @slot.status.to_sym == :completed %>
         <!-- No actions available for completed slots -->
       <% else %>
         <% if current_user.role == 'service_owner' || current_user.role == 'admin' %>

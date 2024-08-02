@@ -16,6 +16,7 @@ class ServiceCentersController < ApplicationController
     @user_slots = @service_center.slots.where(client_user_id: current_user.id) if current_user.role == 'client_user'
     @todays_revenue = Revenue.total_revenue_for_date(Date.today,@service_center.id)
     @this_months_revenue = Revenue.total_revenue_for_month(Date.today.year, Date.today.month, @service_center.id)
+    @ratings = @service_center.ratings
     # @bikes = @sevice_center.bikes
   end
 

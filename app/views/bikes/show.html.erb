@@ -2,8 +2,13 @@
 <hr>
 <div class="container">
   <h2><%= @bike.info %></h2>
+  <p><strong>Status:</strong> <%= @bike.state(:status) %></p>
+  <p><strong>Rate:</strong> <%= @bike.rate %></p>
+  <p><strong>Regstration Num:</strong> <%= @bike.regstration_num %></p>
+  <p><strong>Service Center:</strong> <%= @bike.service_center.name %></p>
+
   <% if @bike.avatar.attached? %>
-    <div class="text-center">
+    <div class="text-center" style="margin-left:77%; margin-top:-13rem">
       <%= image_tag @bike.avatar, class: 'img-fluid rounded' %>
     </div>
   <% end %>
@@ -14,6 +19,38 @@
   <% end %>
 
   <% if ['service_owner', 'admin'].include?(current_user.role) %>
+    <div class="d-flex justify-content-between">
+        <%unless @bike.status == 'on_rent'%>
+          <%if @bike.status == 'not_available' || @bike.status == 'available' || @bike.status == 'returned'%>
+            <%= form_with url: need_wash_service_service_owner_service_center_bike_path(@service_owner, @service_center, @bike), method: :post, class: 'mr-2' do %>
+              <%= submit_tag 'Set to Wash Service', class: 'btn btn-secondary' %>
+            <% end %>
+          <%end%>
+          
+          <%if @bike.status == 'not_available' || @bike.status == 'engine_service' || @bike.status == 'returned'%>
+            <%= form_with url: need_full_service_service_owner_service_center_bike_path(@service_owner, @service_center, @bike), method: :post, class: 'mr-2' do %>
+              <%= submit_tag 'Set to Full Service', class: 'btn btn-secondary' %>
+            <% end %>
+          <%end%>
+
+          <%if @bike.status == 'wash_service'|| @bike.status == 'not_available'%>
+            <%= form_with url: need_engine_service_service_owner_service_center_bike_path(@service_owner, @service_center, @bike), method: :post, class: 'mr-2' do %>
+              <%= submit_tag 'Set to Engine Service', class: 'btn btn-secondary' %>
+            <% end %>
+          <%end%>
+
+          <%unless @bike.status == 'available'%>
+            <%= form_with url: avail_service_owner_service_center_bike_path(@service_owner, @service_center, @bike), method: :post, class: 'mr-2' do %>
+              <%= submit_tag 'Set to Available', class: 'btn btn-success' %>
+            <% end %>
+          <%end%>
+
+          <%= form_with url: not_available_service_owner_service_center_bike_path(@service_owner, @service_center, @bike), method: :post, class: 'mr-2' do %>
+            <%= submit_tag 'Set to Not Available', class: 'btn btn-danger' %>
+          <% end %>
+        <%end%>
+      </div>
+      <hr>  
     <div>
       <h2>Bookings</h2>
       <table class="table table-striped">
@@ -21,6 +58,7 @@
           <tr>
             <th>Booking Date</th>
             <th>Client Name</th>
+            <th>Status</th>
             <th>Actions</th>
           </tr>
         </thead>
@@ -29,6 +67,7 @@
             <tr>
               <td><%= link_to booking.booking_date, service_owner_service_center_bike_booking_path(@service_owner, @service_center, @bike, booking), method: :get %></td>
               <td><%= booking.client_user.name %></td>
+              <td><%= booking.state(:status) %></td>
               <td><%= link_to 'View', service_owner_service_center_bike_booking_path(@service_owner, @service_center, @bike, booking), method: :get, class: 'btn btn-primary btn-sm' %></td>
             </tr>
           <% end %>
@@ -36,35 +75,7 @@
       </table>
       <hr>
 
-      <p><strong>Status:</strong> <%= @bike.status %></p>
-
-      <div class="d-flex justify-content-between">
-        <%= form_with url: need_wash_service_service_owner_service_center_bike_path(@service_owner, @service_center, @bike), method: :post, class: 'mr-2' do %>
-          <%= submit_tag 'Set to Wash Service', class: 'btn btn-secondary' %>
-        <% end %>
-
-      <%if @bike.status == 'wash_service' || @bike.status == 'engine_service'%>
-        <%= form_with url: need_full_service_service_owner_service_center_bike_path(@service_owner, @service_center, @bike), method: :post, class: 'mr-2' do %>
-          <%= submit_tag 'Set to Full Service', class: 'btn btn-secondary' %>
-        <% end %>
-      <%end%>
-
-      <%if @bike.status == 'wash_service'%>
-        <%= form_with url: need_engine_service_service_owner_service_center_bike_path(@service_owner, @service_center, @bike), method: :post, class: 'mr-2' do %>
-          <%= submit_tag 'Set to Engine Service', class: 'btn btn-secondary' %>
-        <% end %>
-      <%end%>
-
-        <%unless @bike.status == 'avilable'%>
-          <%= form_with url: avail_service_owner_service_center_bike_path(@service_owner, @service_center, @bike), method: :post, class: 'mr-2' do %>
-            <%= submit_tag 'Set to Available', class: 'btn btn-success' %>
-          <% end %>
-        <%end%>
-
-        <%= form_with url: not_available_service_owner_service_center_bike_path(@service_owner, @service_center, @bike), method: :post, class: 'mr-2' do %>
-          <%= submit_tag 'Set to Not Available', class: 'btn btn-danger' %>
-        <% end %>
-      </div>
+      <p><strong>Status:</strong> <%= @bike.state(:status) %></p>
     </div>
   <% end %>
 </div>

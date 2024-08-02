@@ -16,7 +16,7 @@
   <body>
     <!-- Navigation Bar -->
     <nav class="navbar navbar-expand-lg navbar-light bg-light">
-      <a class="navbar-brand" href="<%= app_home_path %>">BikeService</a>
+      <a class="navbar-brand" style="margin-left:20px" href="<%= app_home_path %>">BikeService</a>
       <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav" aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"></span>
       </button>
@@ -32,7 +32,7 @@
             <a class="nav-link" href="#contact">Contact</a>
           </li>
           <% if user_signed_in? %>
-            <li class="nav-item">
+            <li class="nav-item" style="margin-left:1000px">
               <%= button_to "Sign Out", destroy_user_session_path, method: :delete, class: 'btn btn-outline-danger' %>
             </li>
           <% end %>
@@ -43,22 +43,27 @@
     <!-- Notifications -->
     <% if notice.present? %>
       <div class="alert alert-info alert-dismissible fade show" role="alert">
-        <%= notice %>
-        <button type="button" class="close" data-dismiss="alert" aria-label="Close">
-          <span aria-hidden="true">&times;</span>
-        </button>
+          <button type="button" data-dismiss="alert" aria-label="Close" style="margin-left:100%">
+            <span aria-hidden="true">&times;</span>
+          </button>
+         
+        <div class="flash-messages">
+         <%= notice %>
+        </div>
       </div>
     <% end %>
     
     <% if alert.present? %>
       <div class="alert alert-warning alert-dismissible fade show" role="alert">
-        <%= alert %>
+        <div class="flash-messages">
+          <%= alert %>
+        </div>
         <button type="button" class="close" data-dismiss="alert" aria-label="Close">
           <span aria-hidden="true">&times;</span>
         </button>
       </div>
-    <% end %>
-    
+    <%end%>
+
     <!-- Main Content -->
     <div class="container mt-4">
       <%= yield %>

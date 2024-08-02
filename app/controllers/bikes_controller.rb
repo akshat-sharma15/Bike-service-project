@@ -46,25 +46,25 @@ class BikesController < ApplicationController
   end
 
   def need_full_service
-    @bike = Bike.find_by(id:params[:id])
+    @bike = Bike.find_by(id: params[:id])
     @bike.need_full_service!
     redirect_to service_owner_service_center_path(@service_owner, @service_center), notice: 'Bike state updated to full service.'
   end
 
   def need_engine_service
-    @bike = Bike.find_by(id:params[:id])
+    @bike = Bike.find_by(id: params[:id])
     @bike.need_engine_service!
     redirect_to service_owner_service_center_path(@service_owner, @service_center), notice: 'Bike state updated to engine service.'
   end
 
   def need_wash_service
-    @bike = Bike.find_by(id:params[:id])
+    @bike = Bike.find_by(id: params[:id])
     @bike.need_wash_service!
     redirect_to service_owner_service_center_path(@service_owner, @service_center), notice: 'Bike state updated to wash service.'
   end
 
   def rental
-    @bike = Bike.find_by(id:params[:id])
+    @bike = Bike.find_by(id: params[:id])
     @bike.rental!
     @booking = Booking.with_booking_date(@bike.id).first
     @booking.status = 'active'
@@ -72,19 +72,19 @@ class BikesController < ApplicationController
   end
 
   def return
-    @bike = Bike.find_by(id:params[:id])
+    @bike = Bike.find_by(id: params[:id])
     @bike.return!
     redirect_to service_owner_service_center_path(@service_owner, @service_center), notice: 'Bike state updated to returned.'
   end
 
   def avail
-    @bike = Bike.find_by(id:params[:id])
+    @bike = Bike.find_by(id: params[:id])
     @bike.avail!
     redirect_to service_owner_service_center_path(@service_owner, @service_center), notice: 'Bike state updated to available.'
   end
 
   def not_available
-    @bike = Bike.find_by(id:params[:id])
+    @bike = Bike.find_by(id: params[:id])
     @bike.not_available!
     redirect_to service_owner_service_center_path(@service_owner, @service_center), notice: 'Bike state updated to not available.'
   end

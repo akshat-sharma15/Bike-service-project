@@ -8,34 +8,34 @@ class Bike < ApplicationRecord
 
   before_save :set_default_rate
 
-  state_machine :status, initial: :avilable do
+  state_machine :status, initial: :available do
     state :full_service
     state :wash_service
     state :engine_service
     state :on_rent
-    state :not_avilable
+    state :not_available
     state :returned
 
     event :need_full_service do
       transition returned: :full_service
       transition wash_service: :full_service
       transition engine_service: :full_service
-      transition not_avilable: :full_service
+      transition not_available: :full_service
     end
 
     event :need_engine_service do
       transition returned: :engine_service
       transition wash_service: :engine_service
-      transition not_avilable: :engine_service
-      transition avilable: :engine_service
+      transition not_available: :engine_service
+      transition available: :engine_service
     end
 
     event :need_wash_service do
-      transition [:returned, :not_avilable, :avilable] => :wash_service
+      transition [:returned, :not_available, :available] => :wash_service
     end
 
     event :rental do
-      transition avilable: :on_rent
+      transition available: :on_rent
     end
 
     event :return do
@@ -43,23 +43,19 @@ class Bike < ApplicationRecord
     end
 
     event :avail do
-      transition [:returned, :not_avilable, :full_service, :wash_service, :engine_service] => :avilable
+      transition [:returned, :not_available, :full_service, :wash_service,
+                  :engine_service] => :available
     end
 
     event :not_available do
-      transition [:returned, :avilable, :full_service, :wash_service, :engine_service] => :not_avilable
+      transition [:returned, :available, :full_service, :wash_service,
+                  :engine_service] => :not_available
     end
-
-    after_transition to: :returned, do: :update_revenue
   end
 
   private
 
   def set_default_rate
     self.rate ||= 0
-  end
-
-  def update_revenue
-    RevenueUpdate.new(self.service_center, self).update_rev_bike
   end
 end
