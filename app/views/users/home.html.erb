@@ -5,22 +5,29 @@
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <%= csrf_meta_tags %>
   <%= csp_meta_tag %>
-  
+
   <!-- Bootstrap CSS from CDN -->
   <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.6.0/css/bootstrap.min.css">
-  
+
+  <!-- Font Awesome for icons -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css">
+
   <!-- Other stylesheets -->
   <%= stylesheet_link_tag 'application', media: 'all' %>
-  
+
   <!-- Custom Styles -->
   <style>
+    body {
+      font-family: 'Roboto', sans-serif;
+    }
     .hero {
       background: url('<%= asset_path('header-bg.jpg') %>') no-repeat center center;
       background-size: cover;
       color: white;
       text-align: center;
-      padding: 120px 0;
+      padding: 150px 0;
       position: relative;
+      overflow: hidden;
     }
     .hero-overlay {
       position: absolute;
@@ -34,27 +41,59 @@
     .hero-content {
       position: relative;
       z-index: 2;
+      animation: fadeInDown 1.5s;
+    }
+    @keyframes fadeInDown {
+      from {
+        opacity: 0;
+        transform: translateY(-20px);
+      }
+      to {
+        opacity: 1;
+        transform: translateY(0);
+      }
     }
     .btn-custom {
       border-radius: 20px;
-      padding: 10px 20px;
-      font-size: 16px;
+      padding: 10px 30px;
+      font-size: 18px;
+      transition: background-color 0.3s ease;
+    }
+    .btn-custom:hover {
+      background-color: #007bff;
+      color: white;
     }
     .main-content {
-      padding: 40px 0;
+      padding: 50px 0;
       background-color: #f8f9fa;
     }
     .card {
       border: none;
       border-radius: 10px;
       overflow: hidden;
+      transition: transform 0.3s ease;
+    }
+    .card:hover {
+      transform: scale(1.05);
     }
     .card img {
-      height: 150px;
+      height: 200px;
+      width:100%32
       object-fit: cover;
     }
     .card-body {
       padding: 1.5rem;
+    }
+    .feature-icon {
+      font-size: 50px;
+      color: #007bff;
+    }
+    .features {
+      text-align: center;
+      padding: 50px 0;
+    }
+    .features h2 {
+      margin-bottom: 40px;
     }
   </style>
 </head>
@@ -74,7 +113,31 @@
       <% end %>
     </div>
   </header> 
-  
+
+  <!-- Features Section -->
+  <section class="features bg-light">
+    <div class="container">
+      <h2 class="mb-5">Why Choose Us?</h2>
+      <div class="row">
+        <div class="col-md-4">
+          <i class="fas fa-tools feature-icon mb-3"></i>
+          <h4>Expert Technicians</h4>
+          <p>Our team of experts are highly trained to provide the best bike services.</p>
+        </div>
+        <div class="col-md-4">
+          <i class="fas fa-clock feature-icon mb-3"></i>
+          <h4>Quick Service</h4>
+          <p>Get your bike serviced quickly and efficiently without any hassle.</p>
+        </div>
+        <div class="col-md-4">
+          <i class="fas fa-thumbs-up feature-icon mb-3"></i>
+          <h4>Quality Guarantee</h4>
+          <p>We guarantee high-quality service for all types of bikes and models.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
   <!-- Main Content -->
   <div class="main-content">
     <div class="container">
@@ -89,10 +152,20 @@
           <% else %>
         <% end %>
       <% else %>
-        
+        <div class="text-center">
+          <h2>Welcome to BikeService</h2>
+          <p class="lead">Please sign in or sign up to get started.</p>
+        </div>
       <% end %>
     </div>
   </div>
+
+  <!-- Footer -->
+  <footer class="bg-dark text-white text-center py-4">
+    <div class="container">
+      <p>&copy; 2024 ServiceZone. All rights reserved.</p>
+    </div>
+  </footer>
 
   <!-- Bootstrap and jQuery Scripts -->
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>

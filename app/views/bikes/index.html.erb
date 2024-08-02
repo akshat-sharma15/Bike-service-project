@@ -23,7 +23,7 @@
                 <tr>
                   <td><%= bike.info %></td>
                   <td><%= bike.service_center.name if bike.service_center %></td>
-                  <td><%= bike.status %></td>
+                  <td><%= bike.state(:status) %></td>
                   <td>
                     <%= link_to 'View', service_owner_service_center_bike_path(bike.service_center.service_owner, bike.service_center, bike), class: 'btn btn-info btn-sm' %>
                   </td>

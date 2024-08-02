@@ -1,0 +1,3 @@
+class SetPendingBookingsToRejected < ApplicationJob
+  
+end

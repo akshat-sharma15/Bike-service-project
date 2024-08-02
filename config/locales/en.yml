@@ -30,6 +30,34 @@
 # available at https://guides.rubyonrails.org/i18n.html.
 
 en:
-  hello: "Hello world"
-
-  full_service: 'ASSD'
+  state_machine:
+    bike:
+      status:
+        available: "Available"
+        full_service: "Full Service"
+        wash_service: "Wash Service"
+        engine_service: "Engine Service"
+        on_rent: "On Rent"
+        not_available: "Not Available"
+        returned: "Returned"
+    slot:
+      status:
+        pending: "Pending"
+        confirmed:  "Confirmed"
+        on_service: "On service"
+        completed:  "Completed"
+        waiting:  "Waiting"
+        rejected: "Rejected"
+        cancled:  "Cancled"
+      service_type:
+        full_service: "Full Service"
+        wash_service: "Wash Service"
+        engine_service: "Engine Service"
+    booking:
+      status:
+        confirmed: "Confirmed"
+        rejected: "Rejected"
+        active: "Active"
+        completed: "Completed"
+        pending: "Pending"
+        complete: "Completed"

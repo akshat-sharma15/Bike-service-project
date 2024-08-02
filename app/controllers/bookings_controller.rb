@@ -2,7 +2,7 @@ class BookingsController < ApplicationController
   before_action :set_service_owner, except: :index
   before_action :set_service_center, except: :index
   before_action :set_bike, except: :index
-  before_action :set_booking, only: [:show, :edit, :update, :destroy, :confirm, :activate, :complete, :reject]
+  before_action :set_booking, only: [:show, :update, :confirm, :activate, :complete, :reject]
 
   def index
     @bookings = Booking.all
@@ -14,24 +14,24 @@ class BookingsController < ApplicationController
   end
 
   def new
-    @booking = Booking.new
-  end
-
-  def edit
-    @booking
+    @booking = @bike.bookings.build
   end
 
   def create
     @client_user = ClientUser.find_by(id: current_user.id)
+    @service_center = ServiceCenter.find(params[:service_center_id])
+    @bike = Bike.find(params[:bike_id])
 
-    @booking = @bike.bookings.build(booking_params.merge(params[:service_center_id], @client_user.id))
+    @booking = @bike.bookings.build(booking_params)
+    @booking.service_center = @service_center
+    @booking.client_user = @client_user
+
     if @booking.save
       flash[:notice] = 'Booking was successfully added.'
-      redirect_to service_owner_service_center_bike_path(@service_owner, @service_center, @bike)
     else
-      redirect_to service_owner_service_center_bike_path(@service_owner, @service_center, @bike)
-      flash.now[:alert] = @booking.errors.full_messages.to_sentence
+      flash[:notice] = "#{@booking.errors.full_messages.to_s}"
     end
+    redirect_to service_owner_service_center_bike_path(@service_owner, @service_center, @bike)
   end
 
   def update
@@ -40,24 +40,40 @@ class BookingsController < ApplicationController
 
   def confirm
     if @booking.confirm!
-      redirect_to service_owner_service_center_bike_path(@service_owner, @service_center, @bike)
+      flash[:notice] = 'Booking confirmed'
     else
-      flash.now[:alert] = @booking.errors.full_messages
-      render :show
+      flash[:alert] = @booking.errors.full_messages.to_sentence.to_s
     end
+    redirect_to service_owner_service_center_bike_path(@service_owner, @service_center, @bike)
   end
 
   def activate
-    @booking.activate!
-    @booking.bike.rental!
+    begin
+      if @booking.booking_date == Date.today
+        if @booking.bike.rental!
+          begin
+            @booking.activate!
+            flash[:notice] = 'Booking Activated'
+          rescue
+            flash[:notice] = 'Booking not Activated check status of booking' 
+          end
+        end
+      else
+        flash[:notice] = 'Booking is not for today' 
+      end
+    rescue
+      flash[:alert] = 'Booking not Activated check status of bike' 
+    end
     redirect_to service_owner_service_center_bike_path(@service_owner, @service_center, @bike)
   end
 
   def complete
-    @booking.complete!
-    @booking.bike.return!
-    days = @booking.return_date - @booking.booking_date
-    @booking.cost = @booking.bike.rate * days
+    begin
+      @booking.complete!
+    rescue
+      flash[:notice] = 'Booking not completed check status of booking' 
+    end
+
     redirect_to service_owner_service_center_bike_path(@service_owner, @service_center, @bike)
   end
 

@@ -1,2 +1,0 @@
-class SlotType < ApplicationRecord
-end
