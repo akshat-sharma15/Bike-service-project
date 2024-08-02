@@ -30,15 +30,15 @@ class BikesController < ApplicationController
 
   def update
     @bike = @service_center.bikes.find(params[:id])
-
-    if @bike.update(service_center_params)
-      redirect_to service_owner_service_center_path(@service_owner, @service_center),
-                  notice: 'Data updated successfully.'
+    debugger
+    if @bike.update(bike_params)
+      flash[:notice] = 'Data updated successfully.'
     else
-      render 'service_owners/index', status: :unprocessable_entity
+      flash[:notice] = 'Bike not updated.'
     end
+    redirect_to service_owner_service_center_path(@service_owner, @service_center)
   end
-
+    
   def destroy
     @bike
   end

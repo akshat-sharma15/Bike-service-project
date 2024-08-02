@@ -55,14 +55,14 @@ class BookingsController < ApplicationController
             @booking.activate!
             flash[:notice] = 'Booking Activated'
           rescue
-            flash[:notice] = 'Booking not Activated check status of booking' 
+            flash[:notice] = 'Booking not Activated check status of booking'
           end
         end
       else
-        flash[:notice] = 'Booking is not for today' 
+        flash[:notice] = 'Booking is not for today'
       end
     rescue
-      flash[:alert] = 'Booking not Activated check status of bike' 
+      flash[:alert] = 'Booking not Activated check status of bike'
     end
     redirect_to service_owner_service_center_bike_path(@service_owner, @service_center, @bike)
   end
@@ -71,7 +71,7 @@ class BookingsController < ApplicationController
     begin
       @booking.complete!
     rescue
-      flash[:notice] = 'Booking not completed check status of booking' 
+      flash[:notice] = 'Booking not completed check status of booking'
     end
 
     redirect_to service_owner_service_center_bike_path(@service_owner, @service_center, @bike)
