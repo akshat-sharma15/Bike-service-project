@@ -9,7 +9,6 @@ class ServiceCentersController < ApplicationController
   end
 
   def show
-    @service_owner = ServiceOwner.find_by(id:params[:service_owner_id])
     @client_user = ClientUser.find_by(id: current_user.id) 
     @service_center = ServiceCenter.find_by(id:params[:id])
     @slots = @service_center.slots

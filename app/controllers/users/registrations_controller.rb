@@ -13,7 +13,6 @@ class Users::RegistrationsController < Devise::RegistrationsController
   # POST /resource
   def create
     super
-    # after_sign_up_path_for(@current_user)
   end
 
   # GET /resource/edit

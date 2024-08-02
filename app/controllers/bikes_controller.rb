@@ -7,8 +7,6 @@ class BikesController < ApplicationController
   end
 
   def show
-    @service_owner
-    @service_center
     @bike = @service_center.bikes.find(params[:id])
   end
 
@@ -21,8 +19,8 @@ class BikesController < ApplicationController
   end
 
   def create
-    @bike = @service_center.bikes.create(bike_params)
-    if @bike
+    @bike = @service_center.bikes.build(bike_params)
+    if @bike.save
       redirect_to service_owner_service_center_path(@service_owner, @service_center),
                   notice: 'bike was successfully added.'
     else
@@ -47,48 +45,75 @@ class BikesController < ApplicationController
 
   def need_full_service
     @bike = Bike.find_by(id: params[:id])
-    @bike.need_full_service!
-    redirect_to service_owner_service_center_path(@service_owner, @service_center), notice: 'Bike state updated to full service.'
+    if @bike.present?
+      @bike.need_full_service!
+      redirect_to service_owner_service_center_path(@service_owner, @service_center), notice: 'Bike state updated to full service.'
+    else
+      redirect_to service_owner_service_center_path(@service_owner, @service_center), notice: 'Bike state not updated.'
+    end
   end
 
   def need_engine_service
     @bike = Bike.find_by(id: params[:id])
-    @bike.need_engine_service!
-    redirect_to service_owner_service_center_path(@service_owner, @service_center), notice: 'Bike state updated to engine service.'
+    if @bike.present?
+      @bike.need_engine_service!
+      redirect_to service_owner_service_center_path(@service_owner, @service_center), notice: 'Bike state updated to engine '
+    else
+      redirect_to service_owner_service_center_path(@service_owner, @service_center), notice: 'Bike state not updated.'
+    end
   end
 
   def need_wash_service
     @bike = Bike.find_by(id: params[:id])
-    @bike.need_wash_service!
-    redirect_to service_owner_service_center_path(@service_owner, @service_center), notice: 'Bike state updated to wash service.'
+    if @bike.present?
+      @bike.need_wash_service!
+      redirect_to service_owner_service_center_path(@service_owner, @service_center), notice: 'Bike state updated to wash service.'
+    else
+      redirect_to service_owner_service_center_path(@service_owner, @service_center), notice: 'Bike state not updated.'
+    end
   end
 
   def rental
     @bike = Bike.find_by(id: params[:id])
-    @bike.rental!
-    @booking = Booking.with_booking_date(@bike.id).first
-    @booking.status = 'active'
-    redirect_to service_owner_service_center_path(@service_owner, @service_center), notice: 'Bike state updated to on rent.'
+    if @bike.present?
+      @bike.rental!
+      @booking = Booking.with_booking_date(@bike.id).first
+      @booking.status = 'active'
+      redirect_to service_owner_service_center_path(@service_owner, @service_center), notice: 'Bike state updated to on rent.'
+    else
+      redirect_to service_owner_service_center_path(@service_owner, @service_center), notice: 'Bike state not updated.'
+    end
   end
 
   def return
     @bike = Bike.find_by(id: params[:id])
-    @bike.return!
-    redirect_to service_owner_service_center_path(@service_owner, @service_center), notice: 'Bike state updated to returned.'
+    if @bike.present?
+      @bike.return!
+      redirect_to service_owner_service_center_path(@service_owner, @service_center), notice: 'Bike state updated to returned.'
+    else
+      redirect_to service_owner_service_center_path(@service_owner, @service_center), notice: 'Bike state not updated.'
+    end
   end
 
   def avail
     @bike = Bike.find_by(id: params[:id])
-    @bike.avail!
-    redirect_to service_owner_service_center_path(@service_owner, @service_center), notice: 'Bike state updated to available.'
+    if @bike.present?
+      @bike.avail!
+      redirect_to service_owner_service_center_path(@service_owner, @service_center), notice: 'Bike state updated to available.'
+    else
+      redirect_to service_owner_service_center_path(@service_owner, @service_center), notice: 'Bike state not updated.'
+    end
   end
 
   def not_available
-    @bike = Bike.find_by(id: params[:id])
-    @bike.not_available!
-    redirect_to service_owner_service_center_path(@service_owner, @service_center), notice: 'Bike state updated to not available.'
+    if @bike.present?
+      @bike = Bike.find_by(id:params[:id])
+      @bike.not_available!
+      redirect_to service_owner_service_center_path(@service_owner, @service_center), notice: 'Bike state updated to not available.'
+    else
+      redirect_to service_owner_service_center_path(@service_owner, @service_center), notice: 'Bike state not updated.'
+    end
   end
-
 
   private
 

@@ -1,12 +1,9 @@
 <h1>Daily Revenue Report</h1>
+<p>Hello <%= @service_center.service_owner.name %>,</p>
+<p>Here is the revenue report for <%= Date.today.strftime('%b %d, %y') %>:</p>
+<p>Total Revenue: <%= number_to_currency(@service_center.revenues.find_by(date: Date.today)&.revenue) %></p>
 
-<p>Hello <%= service_center.service_owner.name %>,</p>
-
-<p>Here is the revenue report for <%= Date.today.strftime('%B %d, %Y') %>:</p>
-
-<p>Total Revenue: <%= number_to_currency(service_center.revenue) %></p>
-
-<h2>Completed Slots:</h2>
+<h2> Slots:</h2>
 <table>
   <thead>
     <tr>
@@ -14,15 +11,19 @@
       <th>Status</th>
       <th>Booking Date</th>
       <th>Service Type</th>
+      <th>Customer Name</th>
     </tr>
   </thead>
   <tbody>
-    <% service_center.slots.each do |slot| %>
+
+    <%slots = @service_center.slots.where(booking_date: Date.today)%>
+    <% slots.each do |slot| %>
       <tr>
         <td><%= slot.id %></td>
         <td><%= slot.status %></td>
         <td><%= slot.booking_date %></td>
         <td><%= slot.service_type %></td>
+        <td><%= slot.client_user.name %></td>
       </tr>
     <% end %>
   </tbody>

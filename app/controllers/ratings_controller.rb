@@ -1,9 +1,12 @@
 class RatingsController < ApplicationController
   def index
-    @service_center = ServiceCenter.find_by(id: params[:service_center_id ])
+    @service_center = ServiceCenter.find_by(id: params[:service_center_id])
     @ratings = @service_center.ratings
   end
+
   def new
+    @service_center = ServiceCenter.find_by(id: params[:service_center_id])
+    @rate = @service_center.ratings.new
   end
 
   def edit

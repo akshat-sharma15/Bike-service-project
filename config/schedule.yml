@@ -1,9 +1,6 @@
-mark_bikes_available:
-  cron: "0 0 * * *" 
-  class: "MarkBikesAvailableWorker"
-  queue: default
+
 daily_revenue_report:
-  corn: '* * * * *'
+  corn: '59 23 * * *'
   class: 'DailyBikeRentEmailSenderWorker'
   queue: default
 
