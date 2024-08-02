@@ -99,7 +99,6 @@ class BookingsController < ApplicationController
   def set_booking
     @booking = @bike.bookings.find(params[:id])
   end
-  end
 
   def booking_params
     params.require(:booking).permit(:booking_date, :return_date, :document, :service_center_id, :bike_id)

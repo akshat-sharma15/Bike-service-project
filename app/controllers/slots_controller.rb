@@ -20,7 +20,6 @@ class SlotsController < ApplicationController
   end
 
   def create
-    debugger
     @slot = @service_center.slots.build(slot_params.merge(client_user_id: current_user.id))
 
     if @slot.save

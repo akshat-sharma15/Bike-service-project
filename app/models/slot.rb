@@ -74,13 +74,11 @@ class Slot < ApplicationRecord
   end
 
   def update_revenue
-    debugger
     RevenueUpdate.new(service_center: self.service_center, slot: self).update_revenue
   end
 
   def initial_state
     total = self.service_center.total_slots
-    debugger
     if status.to_sym == :pending && recent_booking?.present?
       reject!
     elsif status.to_sym  == :pending && Slot.with_booking_date(Date.parse(self.booking_date)).count >= total
@@ -100,7 +98,6 @@ class Slot < ApplicationRecord
   end
 
   def recent_booking?
-    debugger
     date = Date.parse(booking_date) rescue nil
     start_date = date.prev_month(3)
     user = self.client_user

@@ -35,11 +35,11 @@
       <tbody>
         <% @client_user.slots.each do |slot| %>
           <tr>
-            <td><%= link_to slot.service_type, service_owner_service_center_slot_path(slot.service_center.service_owner, slot.service_center, slot), method: :get %></td>
+            <td><%= link_to slot.state(:service_type), service_owner_service_center_slot_path(slot.service_center.service_owner, slot.service_center, slot), method: :get %></td>
             <td><%= Date.parse(slot.booking_date).strftime('%d-%m-%y') %></td>
             <td><%= slot.state(:status) %></td>
             <td>$<%= slot.cost %></td>
-            <td><%= slot.service_center.name %></td>
+            <td><%= slot.service_center.name.capitalize %></td>
           </tr>
         <% end %>
       </tbody>
@@ -62,8 +62,8 @@
       <tbody>
         <% @client_user.bookings.each do |book| %>
           <tr>
-            <td><%= link_to book.bike.info, service_owner_service_center_bike_booking_path(book.bike.service_center.service_owner, book.bike.service_center, book.bike, book), method: :get %></td>
-            <td><%= book.bike.service_center.name %></td>
+            <td><%= link_to book.bike.info.capitalize, service_owner_service_center_bike_booking_path(book.bike.service_center.service_owner, book.bike.service_center, book.bike, book), method: :get %></td>
+            <td><%= book.bike.service_center.name.capitalize %></td>
             <td><%= book.status%></td>
             <td><%= book.booking_date.strftime('%Y-%m-%d') %></td>
           </tr>

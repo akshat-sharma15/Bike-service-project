@@ -68,7 +68,6 @@ class Booking < ApplicationRecord
 
   def valid_date
     return unless booking_date.present? && return_date.present?
-
     errors.add(:booking_date, "can't be in the past") if booking_date < Date.today
     return unless return_date < booking_date
 
