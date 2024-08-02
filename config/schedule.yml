@@ -1,6 +1,6 @@
 
 daily_revenue_report:
   corn: '59 23 * * *'
-  class: 'DailyBikeRentEmailSenderWorker'
+  class: 'DailyRevenueReport'
   queue: default
 
