@@ -36,7 +36,7 @@ class SlotsController < ApplicationController
 
   def confirm
     if @slot.confirm!
-      flash[:notice] = "Slot confirmed!"
+      flash[:notice] = 'Slot confirmed!'
     else
       flash[:alert] = "Slot could not be confirmed."
     end
@@ -55,7 +55,15 @@ class SlotsController < ApplicationController
   def complete
     if @slot.complete!
       flash[:notice] = "Slot completed!"
-      UserMailer.bill_mail(@slot.client_user).deliver_now
+      if @slot.client_user.email.match?(URI::MailTo::EMAIL_REGEXP)
+        begin
+          UserMailer.bill_mail(@slot.client_user).deliver_now
+        rescue 
+          flash[:alert] = "Failed to send email due to an error."
+        end
+      else
+        flash[:alert] = "Invalid email address to send bill."
+      end
     else
       flash[:alert] = "Slot could not be completed."
     end
@@ -63,11 +71,15 @@ class SlotsController < ApplicationController
   end
 
   def reject
-    UserMailer.reject_mail(@slot.client_user).deliver_now
     if @slot.reject!
-      flash[:notice] = "Slot rejected!"
+      flash[:notice] = 'Slot rejected!'
+      begin
+        UserMailer.reject_mail(@slot.client_user).deliver_now
+      rescue 
+        flash[:alert] = "Failed to send email due to an error."
+      end
     else
-      flash[:alert] = "Slot could not be rejected."
+      flash[:alert] = 'Slot could not be rejected.'
     end
     redirect_to service_owner_service_center_slot_path(@service_owner, @service_center, @slot)
   end
@@ -96,7 +108,7 @@ class SlotsController < ApplicationController
     elsif @slot.status == 'on_service'
       flash[:notice] = "Can't cancle booking service started."
     else
-      flash[:notice] = "Slot Cancled"
+      flash[:notice] = "Slot  cancelled"
     end
     redirect_to service_owner_service_center_slot_path(@service_owner, @service_center, @slot)
   end

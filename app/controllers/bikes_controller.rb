@@ -30,7 +30,6 @@ class BikesController < ApplicationController
 
   def update
     @bike = @service_center.bikes.find(params[:id])
-    debugger
     if @bike.update(bike_params)
       flash[:notice] = 'Data updated successfully.'
     else
@@ -38,7 +37,7 @@ class BikesController < ApplicationController
     end
     redirect_to service_owner_service_center_path(@service_owner, @service_center)
   end
-    
+
   def destroy
     @bike
   end
@@ -77,8 +76,6 @@ class BikesController < ApplicationController
     @bike = Bike.find_by(id: params[:id])
     if @bike.present?
       @bike.rental!
-      @booking = Booking.with_booking_date(@bike.id).first
-      @booking.status = 'active'
       redirect_to service_owner_service_center_path(@service_owner, @service_center), notice: 'Bike state updated to on rent.'
     else
       redirect_to service_owner_service_center_path(@service_owner, @service_center), notice: 'Bike state not updated.'

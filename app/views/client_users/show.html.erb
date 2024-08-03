@@ -64,7 +64,7 @@
           <tr>
             <td><%= link_to book.bike.info.capitalize, service_owner_service_center_bike_booking_path(book.bike.service_center.service_owner, book.bike.service_center, book.bike, book), method: :get %></td>
             <td><%= book.bike.service_center.name.capitalize %></td>
-            <td><%= book.status%></td>
+            <td><%= book.state(:status)%></td>
             <td><%= book.booking_date.strftime('%Y-%m-%d') %></td>
           </tr>
         <% end %>

@@ -1,5 +1,6 @@
 class ServiceCentersController < ApplicationController
-   before_action :set_service_owner, except: [:index]
+  before_action :set_service_owner, except: [:index]
+  
   def index
     if params[:location].present?
       @service_centers = ServiceCenter.where('location ILIKE ?', "%#{params[:location]}%")

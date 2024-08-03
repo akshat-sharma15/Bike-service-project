@@ -3,7 +3,7 @@ class Slot < ApplicationRecord
   belongs_to :client_user, inverse_of: :slots
 
   validates :booking_date, presence: true
-  validate :valid_date
+  validate :valid_date, on: :create
   validate :check_availability, on: :create
 
   state_machine :status, initial: :pending do
@@ -13,7 +13,7 @@ class Slot < ApplicationRecord
     state :completed
     state :waiting
     state :rejected
-    state :cancled
+    state :cancelled
 
     event :confirm do
       transition pending: :confirmed
@@ -44,7 +44,7 @@ class Slot < ApplicationRecord
     end
 
     event :cancle do
-      transition [:confirmed, :waiting, :pending] => :cancled
+      transition [:confirmed, :waiting, :pending] => :cancelled
     end
 
     after_transition to: :completed, do: :update_revenue
