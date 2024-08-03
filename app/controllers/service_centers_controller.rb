@@ -1,5 +1,6 @@
 class ServiceCentersController < ApplicationController
-   before_action :set_service_owner, except: [:index]
+  before_action :set_service_owner, except: [:index]
+  
   def index
     if params[:location].present?
       @service_centers = ServiceCenter.where('location ILIKE ?', "%#{params[:location]}%")
@@ -11,11 +12,12 @@ class ServiceCentersController < ApplicationController
   def show
     @client_user = ClientUser.find_by(id: current_user.id) 
     @service_center = ServiceCenter.find_by(id:params[:id])
-    @slots = @service_center.slots
+    @slots = @service_center.slots.decorate
     @user_slots = @service_center.slots.where(client_user_id: current_user.id) if current_user.role == 'client_user'
     @todays_revenue = Revenue.total_revenue_for_date(Date.today,@service_center.id)
     @this_months_revenue = Revenue.total_revenue_for_month(Date.today.year, Date.today.month, @service_center.id)
     @ratings = @service_center.ratings
+    # @slot_decorator = @service_center.slots.decorate
     # @bikes = @sevice_center.bikes
   end
 

@@ -14,9 +14,6 @@
   <% end %>
   <hr>
 
-  <% if current_user.role == 'client_user' %>
-    <%= render 'bookings/form' %>
-  <% end %>
 
   <% if ['service_owner', 'admin'].include?(current_user.role) %>
     <div class="d-flex justify-content-between">
@@ -27,7 +24,7 @@
             <% end %>
           <%end%>
           
-          <%if @bike.status == 'not_available' || @bike.status == 'engine_service' || @bike.status == 'returned'%>
+          <%if @bike.status == 'not_available' || @bike.status == 'engine_service' || @bike.status == 'returned' || @bike.status == 'wash_service'%>
             <%= form_with url: need_full_service_service_owner_service_center_bike_path(@service_owner, @service_center, @bike), method: :post, class: 'mr-2' do %>
               <%= submit_tag 'Set to Full Service', class: 'btn btn-secondary' %>
             <% end %>
@@ -49,8 +46,92 @@
             <%= submit_tag 'Set to Not Available', class: 'btn btn-danger' %>
           <% end %>
         <%end%>
+        <button type="button" class="btn btn-info" data-toggle="modal" data-target="#bikeUpdateModal">
+          Edit Bike
+        </button>
       </div>
-      <hr>  
+         <!-- Bike Update Modal -->
+    <div class="modal fade" id="bikeUpdateModal" tabindex="-1" role="dialog" aria-labelledby="bikeUpdateModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+              <h2>Edit Bike</h2>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <div class="d-flex justify-content-between">             
+            </div>
+              <%= form_with(model: [@service_center.service_owner, @service_center, @bike], local: true) do |form| %>
+              
+              <div class="form-group2">
+                <%= form.label :info, "Bike Info" %>
+                <%= form.text_field :info, class: 'form-control', placeholder: 'Enter bike information' %>
+              </div>
+
+              <div class="form-group2">
+                <%= form.label :registration_num, "Registration Number" %>
+                <%= form.text_field :registration_num, class: 'form-control', placeholder: 'Enter registration number' %>
+              </div>
+
+              <div class="form-group2">
+                <%= form.label :status %>
+                <%= form.select :status, options_for_select(['available', 'full_service', 'wash_service', 'engine_service', 'not_available'], @bike.status), {}, class: 'form-control' %>
+              </div>
+
+              <div class="form-group2">
+                <%= form.label :rate %>
+                <%= form.text_field :rate, class: 'form-control', placeholder: 'Enter bike rate per day' %>
+              </div>
+
+              <div class="form-group2">
+                <%= form.file_field :avatar %>
+              </div>
+
+              <div class="form-group2">
+                <%= form.submit 'Update Bike', class: 'btn btn-primary' %>
+              </div>
+            <% end %>
+            <div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  <% end %>
+</div>
+
+
+<!-- app/views/bikes/show.html.erb -->
+
+  
+
+  <% if current_user.role == 'client_user' %>
+    <button type="button" class="btn btn-primary" data-toggle="modal" data-target="#bookingModal">
+      Book Now
+    </button>
+
+    <!-- Booking Modal -->
+    <div class="modal fade" id="bookingModal" tabindex="-1" role="dialog" aria-labelledby="bookingModalLabel" aria-hidden="true">
+      <div class="modal-dialog" role="document">
+        <div class="modal-content">
+          <div class="modal-header">
+            <h5 class="modal-title" id="bookingModalLabel">New Booking</h5>
+            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+              <span aria-hidden="true">&times;</span>
+            </button>
+          </div>
+          <div class="modal-body">
+            <%= render 'bookings/form' %>
+          </div>
+        </div>
+      </div>
+    </div>
+  <% end %>
+
+  <% if ['service_owner', 'admin'].include?(current_user.role) %>
+    <hr>
     <div>
       <h2>Bookings</h2>
       <table class="table table-striped">
@@ -77,5 +158,30 @@
 
       <p><strong>Status:</strong> <%= @bike.state(:status) %></p>
     </div>
+  <%elsif @bike.bookings.where(client_user_id: current_user.id).present?%>
+    <hr>
+    <div>
+      <h2>Bookings</h2>
+      <table class="table table-striped">
+        <thead>
+          <tr>
+            <th>Booking Date</th>
+            <th>Client Name</th>
+            <th>Status</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          <% @bike.bookings.where(client_user_id: current_user.id).each do |booking| %>
+            <tr>
+              <td><%= link_to booking.booking_date, service_owner_service_center_bike_booking_path(@service_owner, @service_center, @bike, booking), method: :get %></td>
+              <td><%= booking.client_user.name %></td>
+              <td><%= booking.state(:status) %></td>
+              <td><%= link_to 'View', service_owner_service_center_bike_booking_path(@service_owner, @service_center, @bike, booking), method: :get, class: 'btn btn-primary btn-sm' %></td>
+            </tr>
+          <% end %>
+        </tbody>
+      </table>
+      <hr>
   <% end %>
 </div>

@@ -18,10 +18,10 @@
     <tbody>
       <% @service_owner.service_centers.each do |center| %>
         <tr>
-          <td><%= center.name %></td>
+          <td><%= center.name.capitalize %></td>
           <td>
-            <%if center.revenues.present?%>
-              ₹<%= number_to_currency(center.revenues.find_by(date: Date.today).revenue, precision: 2) %>
+            <%if center.revenues.find_by(date: Date.today).present?%>
+              <%= number_to_currency(center.revenues.find_by(date: Date.today).revenue, precision: 2) %>
             <%end%>
           </td>
           <td><%= center.total_slots %></td>

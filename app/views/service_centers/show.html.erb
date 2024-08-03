@@ -99,7 +99,7 @@
               <tr>
                 <td><%= slot.booking_date %></td>
                 <td><%= slot.state(:status) %></td>
-                <td><%= slot.service_type %></td>
+                <td><%= slot.service_type_label %></td>
                 <td>
                   <% if slot.client_user %>
                     <%= link_to slot.client_user.name, service_owner_service_center_slot_path(@service_owner, @service_center, slot) %>
@@ -164,7 +164,7 @@
               <% if bike.status == 'available' %>
                 <tr>
                   <td><%= bike.info.capitalize %></td>
-                  <td><%= bike.status %></td>
+                  <td><%= bike.state(:status) %></td>
                   <td><%= bike.rate %></td>
                   <td><%= link_to 'View', service_owner_service_center_bike_path(@service_owner, @service_center, bike) %></td>
                 </tr>          
@@ -172,13 +172,7 @@
             <% end %>
           </tbody>
         </table>
-        <button class="btn btn-primary mt-3" type="button" data-toggle="collapse" data-target="#slotForm" aria-expanded="false" aria-controls="slotForm">
-          Add Slot
-        </button>
-        <div class="collapse mt-3" id="slotForm">
-          <%= render 'slots/form' %>
-        </div>
-        <% if @slots.any? { |slot| slot.client_user_id == current_user.id } %>
+        <% if @slots.any? { |slot| slot.client_user_id == current_user.id  && slot.status.to_sym == :completed } %>
           <button class="btn btn-primary mt-3" type="button" data-toggle="collapse" data-target="#ratingForm" aria-expanded="false" aria-controls="ratingForm">
             Add Rating
           </button>
@@ -186,6 +180,12 @@
             <%= render 'ratings/form' %>
           </div>
         <% end %>
+        <button class="btn btn-primary mt-3" type="button" data-toggle="collapse" data-target="#slotForm" aria-expanded="false" aria-controls="slotForm">
+          Add Slot
+        </button>
+        <div class="collapse mt-3" id="slotForm">
+          <%= render 'slots/form' %>
+        </div>
       <% end %>
 
       <!-- Service Owner and Admin Specific Sections -->
@@ -204,7 +204,7 @@
             <% @service_center.bikes.each do |bike| %>
               <tr>
                 <td><%= bike.info %></td>
-                <td><%= bike.status %></td>
+                <td><%= bike.state(:status) %></td>
                 <td><%= bike.rate %></td>
                 <td><%= link_to 'View', service_owner_service_center_bike_path(@service_owner, @service_center, bike) %></td>
               </tr>
@@ -217,6 +217,17 @@
         </button>
         <div class="collapse mt-3" id="updateServiceCenterForm">
           <%= form_with model: [@service_owner, @service_center], local: true do |form| %>
+
+            <div class="form-group2">
+              <%= form.label :name %>
+              <%= form.text_field :name, class: 'form-control' %>
+            </div>
+
+            <div class="form-group2">
+              <%= form.label :location %>
+              <%= form.text_field :location, class: 'form-control' %>
+            </div>
+
             <div class="form-group">
               <%= form.label :total_slots, "Total Slots" %>
               <%= form.number_field :total_slots, class: "form-control" %>
@@ -251,7 +262,7 @@
           <% @service_center.ratings.each do |rating| %>
             <%if rating.client_user.present?%>
               <li class="list-group-item">
-                <strong><%= rating.client_user.name %>:</strong>
+                <strong><%= rating.client_user.name.capitalize %>:</strong>
                 <% (1..5).each do |i| %>
                   <% if i <= rating.star.to_i %>
                     <span class="fa fa-star rating-star"></span>
@@ -314,7 +325,3 @@
   <% end %>
 </body>
 </html>
-
-
-
-

@@ -4,7 +4,7 @@
       <%= form_with url: search_service_centers_path, method: :get, local: true do |form| %>
         <div class="input-group input-group-lg">
           <%= form.text_field :location, class: 'form-control', placeholder: 'Search for a city...' %>
-          <div class="input-group-append">
+          <div class="input-group-append" style="margin-top:5px; margin-left:8px;">
             <%= form.submit 'Search', class: 'btn btn-primary' %>
           </div>
         </div>
@@ -26,8 +26,8 @@
         <tbody>
           <% @service_centers.each do |service_center| %>
             <tr>
-              <td><%= link_to service_center.name, service_owner_service_center_path(service_center.service_owner, service_center) %></td>
-              <td><%= service_center.location %></td>
+              <td><%= link_to service_center.name.capitalize, service_owner_service_center_path(service_center.service_owner, service_center) %></td>
+              <td><%= service_center.location.capitalize %></td>
               <td><%= service_center.total_slots %></td>
             </tr>
           <% end %>

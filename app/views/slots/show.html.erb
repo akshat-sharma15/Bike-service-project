@@ -33,9 +33,9 @@
     <!-- Slot Details Section -->
     <div class="mb-4">
       <h2>Slot Details</h2>
-      <h4>Current Status: <%= @slot.status %></h4>
+      <h4>Current Status: <%= @slot.state(:status) %></h4>
       <p><strong>Booking Date:</strong> <%= @slot.booking_date %></p>
-      <p><strong>Type:</strong> <%= @slot.service_type %></p>
+      <p><strong>Type:</strong> <%= @slot.state(:service_type) %></p>
       <p><strong>Cost (in Rs):</strong> <%= @slot.cost %></p>
       <p><strong>Time:</strong> <%= @slot.time %></p>
     </div>
@@ -61,8 +61,6 @@
           <% if @slot.status == 'on_service' %>
             <%= button_to 'Complete', complete_service_owner_service_center_slot_path(@service_owner, @service_center, @slot), method: :patch, class: 'btn btn-primary' %>
           <% end %>
-
-          <%= button_to 'Put on Waiting', waits_service_owner_service_center_slot_path(@service_owner, @service_center, @slot), method: :patch, class: 'btn btn-warning' %>
 
           <% if @slot.status == 'pending' || @slot.status == 'on_service' || @slot.status == 'confirmed' || @slot.status == 'waiting' %>
             <%= button_to 'Reject', reject_service_owner_service_center_slot_path(@service_owner, @service_center, @slot), method: :patch, class: 'btn btn-danger' %>
