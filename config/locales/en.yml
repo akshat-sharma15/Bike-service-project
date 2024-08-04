@@ -2,31 +2,31 @@ en:
   state_machine:
     bike:
       status:
-        available: "Available"
-        full_service: "Full Service"
-        wash_service: "Wash Service"
-        engine_service: "Engine Service"
-        on_rent: "On Rent"
-        not_available: "Not Available"
-        returned: "Returned"
+        available: 'Available'
+        full_service: 'Full Service'
+        wash_service: 'Wash Service'
+        engine_service: 'Engine Service'
+        on_rent: 'On Rent'
+        not_available: 'Not Available'
+        returned: 'Returned'
     slot:
       status:
-        pending: "Pending"
-        confirmed:  "Confirmed"
-        on_service: "On service"
-        completed:  "Completed"
-        waiting:  "Waiting"
-        rejected: "Rejected"
-        cancelled:  " cancelled"
+        pending: 'Pending'
+        confirmed:  'Confirmed'
+        on_service: 'On service'
+        completed:  'Completed'
+        waiting:  'Waiting'
+        rejected: 'Rejected'
+        cancelled:  'cancelled'
       service_type:
-        full_service: "Full Service"
-        wash_service: "Wash Service"
-        engine_service: "Engine Service"
+        full_service: 'Full Service'
+        wash_service: 'Wash Service'
+        engine_service: 'Engine Service'
     booking:
       status:
-        confirmed: "Confirmed"
-        rejected: "Rejected"
-        active: "Active"
-        completed: "Completed"
-        pending: "Pending"
-        complete: "Completed"
+        confirmed: 'Confirmed'
+        rejected: 'Rejected'
+        active: 'Active'
+        completed: 'Completed'
+        pending: 'Pending'
+        complete: 'Completed'

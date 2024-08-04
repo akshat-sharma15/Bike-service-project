@@ -57,7 +57,7 @@ class Slot < ApplicationRecord
   private
 
   def valid_date 
-      errors.add(:booking_date, "can't be in the past") if Date.parse(self.booking_date) < Date.today
+    errors.add(:booking_date, "can't be in the past") if Date.parse(self.booking_date) < Date.today
   end
 
   def set_cost
