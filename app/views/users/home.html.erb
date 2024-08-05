@@ -20,7 +20,7 @@
   <%= stylesheet_link_tag 'home', media: 'all', 'data-turbolinks-track': 'reload' %>
   <style>
     .hero {
-      background: url('/assets/header-bg.jpg') no-repeat center center;
+      background: url(<%= asset_path 'header-bg.jpg' %>) no-repeat center center;
       background-size: cover;
     }
   </style>
