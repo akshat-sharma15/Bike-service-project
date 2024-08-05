@@ -65,10 +65,6 @@
           <% if @slot.status == 'pending' || @slot.status == 'on_service' || @slot.status == 'confirmed' || @slot.status == 'waiting' %>
             <%= button_to 'Reject', reject_service_owner_service_center_slot_path(@service_owner, @service_center, @slot), method: :patch, class: 'btn btn-danger' %>
           <% end %>
-
-           <% if @slot.status == 'pending' %>
-            <%= button_to 'Put on Waiting', waits_service_owner_service_center_slot_path(@service_owner, @service_center, @slot), method: :patch, class: 'btn btn-warning' %>
-          <% end %>
         <% end %>
         
         <% if current_user.role == 'client_user' %>

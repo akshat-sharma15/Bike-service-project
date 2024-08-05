@@ -93,7 +93,7 @@ class Slot < ApplicationRecord
   def check_availability
     count = Slot.with_booking_date(self.booking_date).count
     unless count < (self.service_center.total_slots || 0) + 3
-      errors.add(:base, "No available slots for the selected date")
+      errors.add(:base, 'No available slots for the selected date')
     end
   end
 
