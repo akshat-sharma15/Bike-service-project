@@ -3,8 +3,6 @@ body {
 }
 
 .hero {
-  background: url('/assets/header-bg.jpg') no-repeat center center;
-  background-size: cover;
   color: white;
   text-align: center;
   padding: 150px 0;
