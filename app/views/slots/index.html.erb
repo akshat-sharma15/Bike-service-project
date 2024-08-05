@@ -16,11 +16,11 @@
       <tbody>
         <% @slots.each do |slot| %>
           <tr>
-            <td><%= link_to slot.service_type, service_owner_service_center_slot_path(slot.service_center.service_owner, slot.service_center, slot), method: :get %></td>
+            <td><%= link_to slot.state(:service_type), service_owner_service_center_slot_path(slot.service_center.service_owner, slot.service_center, slot), method: :get %></td>
             <td><%= Date.parse(slot.booking_date).strftime('%d-%m-%y') %></td>
-            <td><%= slot.status %></td>
+            <td><%= slot.state(:status) %></td>
             <td>$<%= slot.cost %></td>
-            <td><%= slot.service_center.name %></td>
+            <td><%= slot.service_center.name.capitalize %></td>
           </tr>
         <% end %>
       </tbody>

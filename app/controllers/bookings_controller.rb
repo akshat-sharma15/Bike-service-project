@@ -18,19 +18,13 @@ class BookingsController < ApplicationController
   end
 
   def create
-    @client_user = ClientUser.find_by(id: current_user.id)
-    @service_center = ServiceCenter.find(params[:service_center_id])
-    @bike = Bike.find(params[:bike_id])
-
-    @booking = @bike.bookings.build(booking_params)
-    @booking.service_center = @service_center
-    @booking.client_user = @client_user
-
+    @booking = @bike.bookings.build(booking_params.merge(service_center_id: params[:service_center_id], client_user_id: current_user.id))
     if @booking.save
       flash[:notice] = 'Booking was successfully added.'
     else
       flash[:notice] = "#{@booking.errors.full_messages.to_s}"
     end
+
     redirect_to service_owner_service_center_bike_path(@service_owner, @service_center, @bike)
   end
 
@@ -44,26 +38,22 @@ class BookingsController < ApplicationController
     else
       flash[:alert] = @booking.errors.full_messages.to_sentence.to_s
     end
+
     redirect_to service_owner_service_center_bike_path(@service_owner, @service_center, @bike)
   end
 
   def activate
     begin
       if @booking.booking_date == Date.today
-        if @booking.bike.rental!
-          begin
-            @booking.activate!
-            flash[:notice] = 'Booking Activated'
-          rescue
-            flash[:notice] = 'Booking not Activated check status of booking'
-          end
-        end
+        @booking.activate!
+        flash[:notice] = 'Booking Activated'
       else
         flash[:notice] = 'Booking is not for today'
       end
     rescue
       flash[:alert] = 'Booking not Activated check status of bike'
     end
+
     redirect_to service_owner_service_center_bike_path(@service_owner, @service_center, @bike)
   end
 
@@ -78,7 +68,12 @@ class BookingsController < ApplicationController
   end
 
   def reject
-    @booking.reject!
+    begin
+      @booking.reject!
+    rescue
+      flash[:notice] = 'Booking not rejected check status of booking'
+    end
+
     redirect_to service_owner_service_center_bike_path(@service_owner, @service_center, @bike)
   end
 

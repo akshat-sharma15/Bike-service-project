@@ -37,6 +37,7 @@ class Booking < ApplicationRecord
 
     after_transition to: :completed, do: :update_revenue
     before_transition to: :completed, do: :update_bike_state
+    before_transition to: :active, do: :update_bike_state
   end
 
   private
@@ -52,6 +53,7 @@ class Booking < ApplicationRecord
     else
       self.return_date = Date.today 
       days = self.return_date - self.booking_date
+      days = 1 if days == 0
       self.cost = self.bike.rate * days
     end
   end
@@ -60,6 +62,12 @@ class Booking < ApplicationRecord
     if self.bike.status == 'on_rent'
       begin
         self.bike.return!
+      rescue
+        errors.add(:return_date, 'Booking not updated, check status of bike')
+      end
+    elsif self.bike.status == 'available'
+      begin
+        self.bike.rental!
       rescue
         errors.add(:return_date, 'Booking not updated, check status of bike')
       end

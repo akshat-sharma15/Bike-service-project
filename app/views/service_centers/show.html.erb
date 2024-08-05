@@ -16,60 +16,10 @@
   
   <!-- Chart.js Library -->
   <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+  <!-- Custom Stylesheet -->
+  <link rel="stylesheet" href="/stylesheets/service_center_details.css">
   
-  <style>
-    body {
-      padding-top: 20px;
-    }
-    .main-content {
-      width: 75%;
-      float: left;
-    }
-    .side-content {
-      width: 25%;
-      float: right;
-      position: fixed;
-      right: 20px;
-      top: 125px; /* Adjusted to avoid overlapping with navbar */
-      height: calc(100% - 80px); /* Adjust height based on button size and top offset */
-      overflow-y: auto;
-    }
-    .chart-container {
-      width: 100%;
-      display: none;
-      margin-bottom: 20px;
-    }
-    .chart-container canvas {
-      width: 100% !important;
-      height: 100% !important;
-    }
-    .toggle-button {
-      position: fixed;
-      top: 100px;
-      right: 20px;
-      z-index: 1000;
-      background-color: #007bff;
-      color: white;
-      border: none;
-      border-radius: 50%;
-      width: 50px;
-      height: 50px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      cursor: pointer;
-      font-size: 12px; /* Adjust font size to fit text */
-      text-align: center; /* Center align the text */
-      padding: 10px; /* Adjust padding for better text fit */
-    }
-    .ratings-list {
-      max-height: calc(100% - 60px); /* Adjust height based on button size */
-      overflow-y: auto;
-    }
-    .rating-star {
-      color: gold;
-    }
-  </style>
 </head>
 <body>
   <div class="container">
@@ -84,7 +34,7 @@
 
       <!-- Slots Section -->
       <h2>Slots</h2>
-      <% if current_user.role == 'service_owner' || current_user.role == 'service_owner'%>
+      <% if current_user.role == 'service_owner' || current_user.role == 'admin'%>
         <table class="table table-striped">
           <thead>
             <tr>

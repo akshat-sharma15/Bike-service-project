@@ -16,7 +16,7 @@
         <td><%= booking.id %></td>
         <td><%= booking.booking_date %></td>
         <td><%= booking.state(:status) %></td>
-        <td><%= booking.client_user.name %></td>
+        <td><%= booking.client_user.name.capitalize %></td>
         <td>
           <%= link_to 'View', service_owner_service_center_bike_booking_path(booking.bike.service_center.service_owner, booking.bike.service_center, booking.bike, booking), method: :get, class: 'btn btn-primary' %>
         </td>

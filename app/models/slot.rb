@@ -57,7 +57,7 @@ class Slot < ApplicationRecord
   private
 
   def valid_date 
-      errors.add(:booking_date, "can't be in the past") if Date.parse(self.booking_date) < Date.today
+    errors.add(:booking_date, "can't be in the past") if Date.parse(self.booking_date) < Date.today
   end
 
   def set_cost
@@ -93,7 +93,7 @@ class Slot < ApplicationRecord
   def check_availability
     count = Slot.with_booking_date(self.booking_date).count
     unless count < (self.service_center.total_slots || 0) + 3
-      errors.add(:base, "No available slots for the selected date")
+      errors.add(:base, 'No available slots for the selected date')
     end
   end
 
