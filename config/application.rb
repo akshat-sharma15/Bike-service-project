@@ -1,5 +1,7 @@
 require_relative "boot"
 
+require 'factory_bot_rails'
+
 require "rails/all"
 
 # Require the gems listed in Gemfile, including any gems
@@ -12,6 +14,10 @@ module BikeService
     config.load_defaults 7.0
     config.autoload_paths += %W(#{config.root}/lib)
 
+    config.generators do |g|
+      g.test_framework :rspec, fixture: true
+      g.fixture_replacement :factory_bot, dir: 'spec/factories'
+    end
 
     # Configuration for the application, engines, and railties goes here.
     #

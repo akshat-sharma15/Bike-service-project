@@ -4,7 +4,9 @@ class Bike < ApplicationRecord
   has_one_attached :avatar
 
   validates :info, presence: true
-  validates :regstration_num, presence: true
+  validates :regstration_num, presence: true, uniqueness: true,
+                              format: { with: /\A(AN|AP|AR|AS|BR|CG|CH|DD|DL|DN|GA|GJ|HP|HR|JH|JK|KA|KL|LD|MH|ML|MN|MP|MZ|NL|OD|PB|PY|RJ|SK|TN|TR|TS|UK|UP|WB)\s\d{1,2}\s[A-Z]{1,2}\s\d{1,4}\z/, # rubocop:disable Layout/LineLength
+                                        message: "must be in the format 'XX 00 XX 0000'" } # rubocop:disable Rails/I18nLocaleTexts
 
   before_save :set_default_rate
 

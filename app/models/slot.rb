@@ -36,7 +36,7 @@ class Slot < ApplicationRecord
     end
 
     event :waits do
-      transition pending: :waiting, if: :recent_booking?
+      transition pending: :waiting
     end
 
     event :reset do
@@ -51,12 +51,16 @@ class Slot < ApplicationRecord
   end
   before_save :set_cost
   after_create :initial_state
-  scope :with_booking_date, ->(date) { where(booking_date: date, status: :confirmed) }
+  scope :with_booking_date, ->(date) { where(booking_date: date.to_s, status: :confirmed) }
   scope :working, ->(date) { where(booking_date: date, status: :on_service) }
 
   private
 
-  def valid_date 
+  def valid_date
+    if self.booking_date.nil?
+      errors.add(:booking_date, "can't be be nil")
+      return
+    end
     errors.add(:booking_date, "can't be in the past") if Date.parse(self.booking_date) < Date.today
   end
 
@@ -81,6 +85,11 @@ class Slot < ApplicationRecord
     total = self.service_center.total_slots
     if status.to_sym == :pending && recent_booking?.present?
       reject!
+      begin
+        UserMailer.reject_mail(self.client_user).deliver_now
+      rescue
+        
+      end
     elsif status.to_sym  == :pending && Slot.with_booking_date(Date.parse(self.booking_date)).count >= total
       waits!
     elsif status.to_sym  == :pending && Slot.with_booking_date(Date.parse(self.booking_date)).count < total
@@ -91,6 +100,7 @@ class Slot < ApplicationRecord
   end
 
   def check_availability
+    return if service_center.nil?
     count = Slot.with_booking_date(self.booking_date).count
     unless count < (self.service_center.total_slots || 0) + 3
       errors.add(:base, 'No available slots for the selected date')

@@ -1,4 +1,5 @@
 class UsersController < ApplicationController
+  skip_before_action :authenticate_user!, only: [:home]
   before_action :set_service_owner 
   before_action :set_client_user
   before_action :set_admin
