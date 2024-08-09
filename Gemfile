@@ -87,6 +87,8 @@ gem 'stripe'
 
 gem 'whenever', require: false
 
+gem 'erb'
+
 ###################################################
 
 group :development do

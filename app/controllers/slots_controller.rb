@@ -21,13 +21,11 @@ class SlotsController < ApplicationController
 
   def create
     @slot = @service_center.slots.build(slot_params.merge(client_user_id: current_user.id))
-
     if @slot.save
       flash[notice:] = 'Slot was successfully created. its under rewiew Check status after some time for updates'
     else
       flash[notice:] = @slot.errors.full_messages
     end
-
     redirect_to service_owner_service_center_path(@service_center.service_owner, @service_center)
   end
 

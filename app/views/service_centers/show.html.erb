@@ -200,8 +200,8 @@
 
     <!-- Ratings Section -->
     <div class="side-content">
-      <button class="toggle-button" onclick="toggleRevenueChart()">Revenue</button>
       <% if current_user.role == 'service_owner' || current_user.role == 'admin' %>
+        <button class="toggle-button" onclick="toggleRevenueChart()" style="margin-top:30px">Revenue</button>
         <div class="chart-container">
           <canvas id="revenueChart"></canvas>
         </div>

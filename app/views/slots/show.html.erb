@@ -53,7 +53,6 @@
           <% if @slot.status == 'pending' || @slot.status == 'waiting' %>
             <%= button_to 'Confirm', confirm_service_owner_service_center_slot_path(@service_owner, @service_center, @slot), method: :patch, class: 'btn btn-primary' %>
           <% end %>   
-
           <% if @slot.status == 'confirmed' %>
             <%= button_to 'Start Service', service_service_owner_service_center_slot_path(@service_owner, @service_center, @slot), method: :patch, class: 'btn btn-primary' %>
           <% end %>    

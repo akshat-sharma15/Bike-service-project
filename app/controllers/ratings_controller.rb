@@ -21,6 +21,9 @@ class RatingsController < ApplicationController
     if @rate.save
       redirect_to service_owner_service_center_path(@service_owner, @service_center),
                   notice: 'Rating was successfully added.'
+    else
+      redirect_to service_owner_service_center_path(@service_owner, @service_center),
+                  notice: 'Rating was not added.'
     end
   end
 
