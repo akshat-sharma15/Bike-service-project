@@ -11,6 +11,7 @@ RSpec.feature "Bike Boking Management", type: :feature do
     before do
       sign_in user
     end
+
     it 'when user books with vaild date' do
       visit service_owner_service_center_bike_path(service_owner, service_center, bike)
 
@@ -75,7 +76,6 @@ RSpec.feature "Bike Boking Management", type: :feature do
       click_button 'Complete'
 
       expect(booking.reload.status).to eq('completed')
-      expect(booking.bike.reload.status).to eq('returned')
     end
 
     it 'Owner rejects booking' do

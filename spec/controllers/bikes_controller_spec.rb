@@ -1,9 +1,15 @@
 require 'rails_helper'
 
 RSpec.describe BikesController, type: :controller do
+  include Devise::Test::ControllerHelpers
   let(:service_owner) { create(:service_owner) }
   let(:service_center) { create(:service_center, service_owner: service_owner) }
   let(:bike) { create(:bike, service_center: service_center) }
+  let(:user) { User.find_by(id: service_owner.id) }
+
+  before do
+    sign_in user
+  end
 
   describe 'POST #create' do
     context 'with valid parameters' do
