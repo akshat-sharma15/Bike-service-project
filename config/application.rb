@@ -1,6 +1,5 @@
 require_relative "boot"
 
-require 'factory_bot_rails'
 
 require "rails/all"
 
